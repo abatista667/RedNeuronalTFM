@@ -1,0 +1,10 @@
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetwork\bin\Debug\NeuralNetwork.exe.config
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetwork\bin\Debug\NeuralNetwork.exe
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetwork\bin\Debug\NeuralNetwork.pdb
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetwork\bin\Debug\MathNet.Numerics.dll
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetwork\bin\Debug\MathNet.Numerics.xml
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetwork\obj\Debug\NeuralNetwork.csprojAssemblyReference.cache
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetwork\obj\Debug\NeuralNetwork.csproj.CoreCompileInputs.cache
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetwork\obj\Debug\NeuralNetwork.csproj.CopyComplete
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetwork\obj\Debug\NeuralNetwork.exe
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetwork\obj\Debug\NeuralNetwork.pdb
