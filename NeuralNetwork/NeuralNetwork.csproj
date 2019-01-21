@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lost.cs" />
     <Compile Include="Activation.cs" />
     <Compile Include="Layers.cs" />
     <Compile Include="NeuralNetworkBase.cs" />

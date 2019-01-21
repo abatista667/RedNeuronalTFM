@@ -33,5 +33,23 @@ namespace NeuralNetwork
 
             return function;
         }
+
+        public static Func<double, double> GetActivationDerivativeByName(string name = "None")
+        {
+            Func<double, double> function;
+            switch (name)
+            {
+                case "Relu":
+                    function = Relu;
+                    break;
+                case "None":
+                    function = None;
+                    break;
+                default:
+                    throw new Exception("La funcion de activacion no existe");
+            }
+
+            return function;
+        }
     }
 }

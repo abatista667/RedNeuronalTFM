@@ -12,9 +12,9 @@ namespace NeuralNetwork
         {
             var nn = new NeuralNetworkBase(
             new List<Layer>{
+                   new Layer(10),//no tiene pesos
+                   new Layer(5),
                    new Layer(2),//la ultima capa siempre sera el output
-                   new Layer(2),//la ultima capa siempre sera el output
-                   new Layer(1),
             }, epoch: 1);
 
             nn.Print();
@@ -27,7 +27,7 @@ namespace NeuralNetwork
 
             for (int i = 0; i < X.Length; i++)
             {
-                X[i] = new double[2];
+                X[i] = new double[10];
                 for (int j = 0; j < X[i].Length; j++)
                 {
                     X[i][j] = random.NextDouble();
@@ -35,7 +35,7 @@ namespace NeuralNetwork
                 }
             }
 
-            nn.Fit(X, new double[1] { 1});
+            nn.Fit(X, new double[2] { 2,1});
 
             Console.Read();
         }
