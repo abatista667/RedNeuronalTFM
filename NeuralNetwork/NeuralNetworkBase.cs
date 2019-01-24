@@ -1,7 +1,9 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,16 +29,17 @@ namespace NeuralNetwork
 
         Func<Matrix<double>, Matrix<double>, Matrix<double>> _lostFunction;
         readonly MatrixBuilder<double> M = Matrix<double>.Build;
-
+        bool _useBias;
 
         //inicializar los valores de la red neuronal
-        public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100, string lost = "MSE")
+        public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100, 
+        string lost = "MSE", bool useBias=true)
         {
             _layers = layers;
 
             _learningRate = learningRate;
             _epoch = epoch;
-
+            _useBias = useBias;
             //la primera capa es la de entrada, 
             //la cantidad de nodos corresponde a la cantidad de inputs
             _inputs = M.Dense(layers.First().Nodes, 1);
@@ -81,6 +84,11 @@ namespace NeuralNetwork
 
         }
 
+        public NeuralNetworkBase()
+        {
+            _layerOutput = new List<Matrix<double>>();
+        }
+
 
         /// <summary>
         /// por cada uno de los ejemplos dados ejecutar el ciclo de entrenamiento de la red,
@@ -111,10 +119,12 @@ namespace NeuralNetwork
             for (int i = 0; i < _weigths.Count; i++)
             {
                 output = _weigths[i] * output;
-                output.Add(_bias[i]);
+
+                if(_useBias) output.Add(_bias[i]);
                 //aplicar la funcion de activacion de la capa a cada uno de los valores del vector
                 var outPutActivated = M.DenseOfMatrix(output);
-                output.Map(Activation.GetActivationByName(), outPutActivated);
+                var function = Activation.GetActivationByName(_layers[i + 1].Activation);
+                output.Map(function, outPutActivated);
                 output = M.DenseOfMatrix(outPutActivated);
 
                 _layerOutput.Add(M.DenseOfMatrix(output));
@@ -141,7 +151,7 @@ namespace NeuralNetwork
             var deltas = new List<Matrix<double>>();
             var e = M.DenseOfMatrix(error);
 
-            for (int i = _layerOutput.Count - 1; i < _weigths.Count; i++)
+            for (int i = _layerOutput.Count - 1; i <= 0; i--)
             {
                 var derivative = Activation.GetActivationDerivativeByName(_layers[i].Activation);
                 var gradient = _layerOutput[i].Map(derivative);
@@ -163,34 +173,44 @@ namespace NeuralNetwork
                 delta *= _learningRate;
 
                 deltas.Add(delta);
+
+                _weigths[i] += delta;
+                _bias[i] += gradient;
             }
 
             deltas.Reverse();
             return deltas;
         }
 
-        public NeuralNetworkModel Fit(double[][] input, double[] desiredOutPut)
+        public NeuralNetworkModel Fit(double[][] input, double[][] desiredOutPut)
         {
-
             _totalLost = M.Dense(desiredOutPut.Length, 1);
             for (int j = 0; j < _epoch; j++)
             {
-                //Console.WriteLine($"Epoch: {j}/{_epoch}");
+                Console.WriteLine($"Epoch=[{j}/{_epoch}");
                 for (int i = 0; i < input.Length; i++)
                 {
-                    Train(input[i], desiredOutPut);
+                    Train(input[i], desiredOutPut[i]);
                 }
-                //Console.WriteLine($"Perdida total:  {_totalLost}");
             }
-
-            this.Print();
 
             return new NeuralNetworkModel
             {
                 Weigths = _weigths,
+                Layers = _layers,
+                Bias = _bias,
+                UseBias = _useBias
             };
         }
 
+
+        public double[] Predict(double[] x)
+        {
+            var input = M.Dense(x.Length, 1, x);
+            var guess = FeedFordward(input);
+
+            return guess.ToColumnArrays()[0];
+        }
 
         public void Print()
         {
@@ -206,6 +226,42 @@ namespace NeuralNetwork
             {
                 Console.Write(item + " ");
             }
+        }
+
+
+        public void Save(string path)
+        {
+            var model = new NeuralNetworkModel
+            {
+                Weigths = _weigths,
+                Layers = _layers,
+                Bias = _bias,
+                UseBias = _useBias
+            };
+
+            // Persist to file
+            FileStream stream = File.Create(path);
+            var formatter = new BinaryFormatter();
+            Console.WriteLine("Serializing");
+            formatter.Serialize(stream, model);
+            stream.Close();
+        }
+
+        public void Load(string path)
+        {
+            var lines = File.ReadAllLines(path);
+            var json = string.Join("", lines);
+
+            // Restore from file
+            var stream = File.OpenRead(path);
+            Console.WriteLine("Deserializing vector");
+            var formatter = new BinaryFormatter();
+            var model = (NeuralNetworkModel)formatter.Deserialize(stream);
+            stream.Close();
+
+            _weigths = model.Weigths;
+            _bias = model.Bias;
+            _layers = model.Layers;
         }
     }
 }

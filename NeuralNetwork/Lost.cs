@@ -9,7 +9,7 @@ namespace NeuralNetwork
     {
         private static Matrix<double> MSE(Matrix<double> arg, Matrix<double> arg2)
         {
-            return arg - arg2;
+            return (arg - arg2).PointwisePower(2).Divide(arg2.RowCount);
         }
         private static Matrix<double> CrossEntropy(Matrix<double> arg1, Matrix<double> arg2)
         {

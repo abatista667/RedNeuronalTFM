@@ -1,1 +1,11 @@
 packages
+
+*.dat
+*.json
+*.dll
+*.exe
+
+NeuralNetwork/obj
+NeuralNetwork/bin
+NeuralNetwork.Test/obj
+NeuralNetwork.Test/bin
