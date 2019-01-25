@@ -32,8 +32,8 @@ namespace NeuralNetwork
         bool _useBias;
 
         //inicializar los valores de la red neuronal
-        public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100, 
-        string lost = "MSE", bool useBias=true)
+        public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
+        string lost = "MSE", bool useBias = true)
         {
             _layers = layers;
 
@@ -64,20 +64,20 @@ namespace NeuralNetwork
                 var weights = M.Dense(l.Nodes, andL.Nodes,
                 (x, y) =>
                 {
-                    Random random = new MathNet.Numerics.Random.SystemRandomSource();
-                    var sample = random.NextDouble();
-                    return sample;
+                    return MathNet.Numerics.Distributions.ContinuousUniform.Sample(0.00001, 1);
                 });
                 _weigths.Add(weights);
 
                 //inicializar las matrices bias
+              
 
                 var bias = M.Dense(l.Nodes, 1,
                             (x, y) =>
                             {
-                                Random random = new MathNet.Numerics.Random.SystemRandomSource();
-                                var sample = random.NextDouble();
-                                return sample;
+                                //Random random = new MathNet.Numerics.Random.SystemRandomSource();
+                                //var sample = random.NextDouble();
+                                //return sample;
+                                return MathNet.Numerics.Distributions.ContinuousUniform.Sample(0.00001, 1);
                             });
                 _bias.Add(bias);
             }
@@ -107,6 +107,11 @@ namespace NeuralNetwork
             var output = FeedFordward(input);
             //var networkLost = desired.Subtract(output);
             var networkLost = _lostFunction(desired, output);
+
+            if (networkLost[0, 0].Equals(double.NaN) || double.IsInfinity(networkLost[0, 0]))
+                throw new Exception("invalid value");
+
+            _totalLost += networkLost;
             BackPropagation(networkLost);
 
             //TODO: optimizar los pesos W usando la funcion de optimizacion
@@ -118,16 +123,17 @@ namespace NeuralNetwork
             _layerOutput.Clear();
             for (int i = 0; i < _weigths.Count; i++)
             {
-                output = _weigths[i] * output;
+                var newOutput = _weigths[i] * output;
 
-                if(_useBias) output.Add(_bias[i]);
+                if (_useBias) newOutput.Add(_bias[i]);
                 //aplicar la funcion de activacion de la capa a cada uno de los valores del vector
-                var outPutActivated = M.DenseOfMatrix(output);
+      
+                var outPutActivated = M.DenseOfMatrix(newOutput);
                 var function = Activation.GetActivationByName(_layers[i + 1].Activation);
-                output.Map(function, outPutActivated);
+                newOutput.Map(function, outPutActivated);
                 output = M.DenseOfMatrix(outPutActivated);
-
                 _layerOutput.Add(M.DenseOfMatrix(output));
+                newOutput = output;
             }
 
             return output;
@@ -146,21 +152,23 @@ namespace NeuralNetwork
         # update the weights for the links between the hidden and output layers
         self.who += self.lr * numpy.dot((output_errors * final_outputs * (1.0 - final_outputs)), numpy.transpose(hidden_outputs))
         */
-        private List<Matrix<double>> BackPropagation(Matrix<double> error)
+        private void BackPropagation(Matrix<double> error)
         {
-            var deltas = new List<Matrix<double>>();
             var e = M.DenseOfMatrix(error);
 
-            for (int i = _layerOutput.Count - 1; i <= 0; i--)
+            for (int i = _layerOutput.Count - 1; i >= 0; i--)
             {
-                var derivative = Activation.GetActivationDerivativeByName(_layers[i].Activation);
-                var gradient = _layerOutput[i].Map(derivative);
+                var derivative = Activation.GetActivationDerivativeByName(_layers[i + 1].Activation);
+                var outputDerivated = _layerOutput[i].Map(derivative);
 
                 if (i < _layerOutput.Count - 1) //no es la capa de salida
                     e = _weigths[i + 1].Transpose() * e;
 
+                if (e[0, 0].Equals(double.NaN) || double.IsInfinity(e[0, 0]))
+                    throw new Exception("invalid value");
+
                 //multiplicar la pendiente de los valores de salida de la capa por el error
-                gradient.PointwiseMultiply(e);
+                var gradient = outputDerivated.PointwiseMultiply(e);
 
                 var inputT = _inputs.Transpose();
 
@@ -172,27 +180,37 @@ namespace NeuralNetwork
                 var delta = gradient * inputT;
                 delta *= _learningRate;
 
-                deltas.Add(delta);
+                if (delta[0,0] > 0 && i == _layerOutput.Count - 1)
+                {
+                    //Console.Write("Layer: "+ i +1);
+                    //Console.Write("output: ");
+                    //Console.Write(_layerOutput.Last());
+                    //Console.Write(delta);
+                    Console.WriteLine("");
+                }
 
                 _weigths[i] += delta;
                 _bias[i] += gradient;
-            }
 
-            deltas.Reverse();
-            return deltas;
+                if (_weigths[i][0, 0].Equals(double.NaN) || double.IsInfinity(_weigths[i][0, 0]))
+                    throw new Exception("invalid value");
+            }
         }
 
         public NeuralNetworkModel Fit(double[][] input, double[][] desiredOutPut)
         {
-            _totalLost = M.Dense(desiredOutPut.Length, 1);
+
             for (int j = 0; j < _epoch; j++)
             {
-                Console.WriteLine($"Epoch=[{j}/{_epoch}");
+                _totalLost = M.Dense(1, desiredOutPut[0].Length);
+                Console.WriteLine($"Epoch=[ {j +1} / {_epoch} ]");
                 for (int i = 0; i < input.Length; i++)
                 {
                     Train(input[i], desiredOutPut[i]);
                 }
+                Console.WriteLine($"Lost= {_totalLost}");
             }
+
 
             return new NeuralNetworkModel
             {
@@ -216,7 +234,7 @@ namespace NeuralNetwork
         {
             //Print inputs
 
-            Console.WriteLine(_inputs + " ");
+            //Console.WriteLine(_inputs + " ");
 
             Console.WriteLine("");
 
@@ -224,7 +242,7 @@ namespace NeuralNetwork
 
             foreach (var item in _weigths)
             {
-                Console.Write(item + " ");
+                Console.WriteLine(item);
             }
         }
 

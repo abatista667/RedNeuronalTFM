@@ -26,7 +26,7 @@ namespace NeuralNetwork
 
         private static double Dstep(double arg)
         {
-            return 0;
+            return 1;
         }
 
         private static double Sigmoid(double x)
@@ -36,7 +36,26 @@ namespace NeuralNetwork
 
         private static double Dsigmoid(double x)
         {
-            return 1 - (Math.Pow(x, 2));
+            //var val = 1 - (Math.Pow(x, 2));
+
+            var val = x * (1 - x);
+            return val;
+        }
+
+        private static double TanH(double x)
+        {
+            var e = Math.E;
+            var numerator = Math.Pow(e, x) - Math.Pow(e, -x);
+            var denominator = Math.Pow(e, x) + Math.Pow(e, -x);
+            var tanh = numerator / denominator;
+
+            return Math.Tanh(x);
+        }
+
+        private static double dTanH(double dx)
+        {
+            
+         return 1 -Math.Pow(dx, 2);
         }
 
 
@@ -56,6 +75,9 @@ namespace NeuralNetwork
                     break;
                 case "Sigmoid":
                     function = Sigmoid;
+                    break;
+                case "Tanh":
+                    function = TanH;
                     break;
                 default:
                     throw new Exception("La funcion de activacion no existe");
@@ -80,6 +102,9 @@ namespace NeuralNetwork
                     break;
                 case "Sigmoid":
                     function = Dsigmoid;
+                    break;
+                case "Tanh":
+                    function = dTanH;
                     break;
                 default:
                     throw new Exception("La funcion de activacion no existe");

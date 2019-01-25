@@ -18,7 +18,7 @@ namespace NeuralNetwork.Test
             MatrixBuilder<double> M = Matrix<double>.Build;
 
             var y = M.Dense(1, 2, new double[2] { 1, 0 });
-            var yHat = M.Dense(1, 2, new double[2] { 0, 3 });
+            var yHat = M.Dense(1, 2, new double[2] { -1, 0 });
 
             var res = func(y, yHat);
         }
