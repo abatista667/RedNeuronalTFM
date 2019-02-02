@@ -14,5 +14,7 @@ namespace NeuralNetwork
         public List<Matrix<double>> Bias { get; internal set; }
 
         public bool UseBias { get; set; }
+
+        public List<double> Errors { get; internal set; }
     }
 }

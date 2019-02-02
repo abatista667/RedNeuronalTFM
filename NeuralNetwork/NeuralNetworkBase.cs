@@ -28,15 +28,17 @@ namespace NeuralNetwork
         Matrix<double> _totalLost;
 
         Func<Matrix<double>, Matrix<double>, Matrix<double>> _lostFunction;
+        Func<Matrix<double>, Matrix<double>, double> _lostDerivativeFunction;
         readonly MatrixBuilder<double> M = Matrix<double>.Build;
         bool _useBias;
+        int _batchSize;
 
         //inicializar los valores de la red neuronal
         public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
-        string lost = "MSE", bool useBias = true)
+        string lost = "MSE", bool useBias = true, int batchSize = 200)
         {
             _layers = layers;
-
+            _batchSize = batchSize;
             _learningRate = learningRate;
             _epoch = epoch;
             _useBias = useBias;
@@ -48,7 +50,7 @@ namespace NeuralNetwork
             _bias = new List<Matrix<double>>();
             _layerOutput = new List<Matrix<double>>();
             _lostFunction = Lost.GetLostFunction(lost);
-
+            _lostDerivativeFunction = Lost.GetLostDerivationFunction(lost);
             for (int i = 0; i < layers.Count; i++)
             {
 
@@ -69,7 +71,7 @@ namespace NeuralNetwork
                 _weigths.Add(weights);
 
                 //inicializar las matrices bias
-              
+
 
                 var bias = M.Dense(l.Nodes, 1,
                             (x, y) =>
@@ -113,8 +115,48 @@ namespace NeuralNetwork
 
             _totalLost += networkLost;
             BackPropagation(networkLost);
+        }
 
-            //TODO: optimizar los pesos W usando la funcion de optimizacion
+        //use batches to train the model
+        private double Train(double[][] inputArray, double[][] desiredOutPut)
+        {
+            Matrix<double> outputMatrix = null, desiredMatrix = null;
+
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                _inputs = M.Dense(inputArray[i].Length, 1, inputArray[i]);
+
+                var input = M.DenseOfMatrix(_inputs);
+                var desired = M.Dense(desiredOutPut[i].Length, 1, desiredOutPut[i]);
+
+                //por cada capa de la red aplicar la suma ponderada
+                var output = FeedFordward(input);
+
+                if (outputMatrix == null)
+                {
+                    outputMatrix = M.DenseOfMatrix(output);
+                    desiredMatrix = M.DenseOfMatrix(desired);
+                }
+                else
+                {
+                    var tmpMatrix = M.Dense(output.RowCount, outputMatrix.ColumnCount + 1);
+                    outputMatrix.Append(output, tmpMatrix);
+                    outputMatrix = M.DenseOfMatrix(tmpMatrix);
+
+                    desiredMatrix.Append(desired, tmpMatrix);
+                    desiredMatrix = M.DenseOfMatrix(tmpMatrix);
+                }
+
+            }
+
+            //var networkLost = desired.Subtract(output);
+            var batchLoss = _lostFunction(desiredMatrix, outputMatrix);
+            var lostSlope = _lostDerivativeFunction(desiredMatrix, outputMatrix);
+
+            _totalLost += batchLoss;
+            BackPropagation(batchLoss, lostSlope);
+
+            return batchLoss.RowSums().ToArray().Sum();
         }
 
         private Matrix<double> FeedFordward(Matrix<double> input)
@@ -127,7 +169,7 @@ namespace NeuralNetwork
 
                 if (_useBias) newOutput.Add(_bias[i]);
                 //aplicar la funcion de activacion de la capa a cada uno de los valores del vector
-      
+
                 var outPutActivated = M.DenseOfMatrix(newOutput);
                 var function = Activation.GetActivationByName(_layers[i + 1].Activation);
                 newOutput.Map(function, outPutActivated);
@@ -138,21 +180,8 @@ namespace NeuralNetwork
 
             return output;
         }
-        /*
-        calculate signals into final output layer
-        final_inputs = numpy.dot(self.who, hidden_outputs)
-        # calculate the signals emerging from final output layer
-        final_outputs = self.activation_function(final_inputs)
-        
-        # output layer error is the (target - actual)
-        output_errors = targets - final_outputs
-        # hidden layer error is the output_errors, split by weights, recombined at hidden nodes
-        hidden_errors = numpy.dot(self.who.T, output_errors) 
-        
-        # update the weights for the links between the hidden and output layers
-        self.who += self.lr * numpy.dot((output_errors * final_outputs * (1.0 - final_outputs)), numpy.transpose(hidden_outputs))
-        */
-        private void BackPropagation(Matrix<double> error)
+
+        private void BackPropagation(Matrix<double> error, double lostSlope = 1)
         {
             var e = M.DenseOfMatrix(error);
 
@@ -177,17 +206,13 @@ namespace NeuralNetwork
                     inputT = _layerOutput[i - 1].Transpose();
                 }
 
-                var delta = gradient * inputT;
-                delta *= _learningRate;
+               // var lost = Lost.GetLostFunction("MSE");
 
-                if (delta[0,0] > 0 && i == _layerOutput.Count - 1)
-                {
-                    //Console.Write("Layer: "+ i +1);
-                    //Console.Write("output: ");
-                    //Console.Write(_layerOutput.Last());
-                    //Console.Write(delta);
-                    Console.WriteLine("");
-                }
+                var delta = gradient * inputT;
+                delta *= _learningRate * lostSlope;
+
+                if(lostSlope == -1)
+                Console.WriteLine("");
 
                 _weigths[i] += delta;
                 _bias[i] += gradient;
@@ -199,14 +224,19 @@ namespace NeuralNetwork
 
         public NeuralNetworkModel Fit(double[][] input, double[][] desiredOutPut)
         {
+            //todo: split data into batches
+            var inputBatches = SplitInBatches(input);
+            var Labels = SplitInBatches(desiredOutPut);
+            var errors = new List<double>();
 
             for (int j = 0; j < _epoch; j++)
             {
                 _totalLost = M.Dense(1, desiredOutPut[0].Length);
-                Console.WriteLine($"Epoch=[ {j +1} / {_epoch} ]");
-                for (int i = 0; i < input.Length; i++)
+                Console.WriteLine($"Epoch=[ {j + 1} / {_epoch} ]");
+                for (int i = 0; i < inputBatches.Length; i++)
                 {
-                    Train(input[i], desiredOutPut[i]);
+                   var e = Train(inputBatches[i], Labels[i]);
+                   errors.Add(e);
                 }
                 Console.WriteLine($"Lost= {_totalLost}");
             }
@@ -217,7 +247,8 @@ namespace NeuralNetwork
                 Weigths = _weigths,
                 Layers = _layers,
                 Bias = _bias,
-                UseBias = _useBias
+                UseBias = _useBias,
+                Errors = errors
             };
         }
 
@@ -280,6 +311,30 @@ namespace NeuralNetwork
             _weigths = model.Weigths;
             _bias = model.Bias;
             _layers = model.Layers;
+        }
+
+        private double[][][] SplitInBatches(double[][] input)
+        {
+            int batchesCount = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(input.Length) / _batchSize));
+            double[][][] inputBatches = new double[batchesCount][][];
+
+            int batchIndex = 0;
+            for (int i = 0; i < input.Length; i += _batchSize)
+            {
+                if (batchIndex < batchesCount - 1)
+                {
+                    inputBatches[batchIndex] = new double[_batchSize][];
+                    Array.Copy(input, i, inputBatches[batchIndex], 0, _batchSize);
+                }
+                else
+                {
+                    inputBatches[batchIndex] = new double[input.Length - i][];
+                    Array.Copy(input, i, inputBatches[batchIndex], 0, inputBatches[batchIndex].Length);
+                }
+                batchIndex++;
+            }
+
+            return inputBatches;
         }
     }
 }
