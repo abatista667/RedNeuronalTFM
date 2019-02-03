@@ -224,7 +224,12 @@ namespace NeuralNetwork
 
         public NeuralNetworkModel Fit(double[][] input, double[][] desiredOutPut)
         {
-            //todo: split data into batches
+            //todo: check if input len equals to 1st layer note
+
+            if(input.First().Length != _layers.First().Nodes)
+                throw new Exception($"El vector de entrada no concuerda con el " +
+                $"numero de nodos de la primera capa, se esperan: {_layers.First().Nodes} nodos");
+
             var inputBatches = SplitInBatches(input);
             var Labels = SplitInBatches(desiredOutPut);
             var errors = new List<double>();

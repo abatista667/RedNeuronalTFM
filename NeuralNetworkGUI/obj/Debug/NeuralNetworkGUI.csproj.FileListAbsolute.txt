@@ -7,10 +7,11 @@ C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\bin\Debug\Neu
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\bin\Debug\NeuralNetwork.exe.config
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\bin\Debug\MathNet.Numerics.xml
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.csprojAssemblyReference.cache
-C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.Form1.resources
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.Properties.Resources.resources
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.csproj.GenerateResource.cache
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.csproj.CoreCompileInputs.cache
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.csproj.CopyComplete
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.exe
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.pdb
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.MainWindows.resources
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.LossCharForm.resources
