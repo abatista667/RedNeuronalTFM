@@ -111,7 +111,7 @@ namespace NeuralNetwork
             var networkLost = _lostFunction(desired, output);
 
             if (networkLost[0, 0].Equals(double.NaN) || double.IsInfinity(networkLost[0, 0]))
-                throw new Exception("invalid value");
+                throw new LearingRateTooHighException();
 
             _totalLost += networkLost;
             BackPropagation(networkLost);
@@ -194,7 +194,7 @@ namespace NeuralNetwork
                     e = _weigths[i + 1].Transpose() * e;
 
                 if (e[0, 0].Equals(double.NaN) || double.IsInfinity(e[0, 0]))
-                    throw new Exception("invalid value");
+                    throw new LearingRateTooHighException();
 
                 //multiplicar la pendiente de los valores de salida de la capa por el error
                 var gradient = outputDerivated.PointwiseMultiply(e);
@@ -218,7 +218,7 @@ namespace NeuralNetwork
                 _bias[i] += gradient;
 
                 if (_weigths[i][0, 0].Equals(double.NaN) || double.IsInfinity(_weigths[i][0, 0]))
-                    throw new Exception("invalid value");
+                    throw new LearingRateTooHighException();
             }
         }
 
@@ -236,7 +236,7 @@ namespace NeuralNetwork
 
             for (int j = 0; j < _epoch; j++)
             {
-                _totalLost = M.Dense(1, desiredOutPut[0].Length);
+                _totalLost = M.Dense(desiredOutPut[0].Length, 1);
                 Console.WriteLine($"Epoch=[ {j + 1} / {_epoch} ]");
                 for (int i = 0; i < inputBatches.Length; i++)
                 {

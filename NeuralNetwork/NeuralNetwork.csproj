@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LearingRateTooHighException.cs" />
     <Compile Include="Lost.cs" />
     <Compile Include="Activation.cs" />
     <Compile Include="Layers.cs" />

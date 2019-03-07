@@ -22,9 +22,14 @@ namespace NeuralNetworkGUI
         NeuralNetworkBase nn;
         DataTable dataTable;
         NeuralNetworkModel model;
+        double[][] Y, X, Xtest, Ytest;
+        double[][] Ypred;
+        bool init = false;
+
+        List<string> predictFields, targetFields;
         private void button1_Click(object sender, EventArgs e)
         {
-            
+
 
         }
 
@@ -44,7 +49,7 @@ namespace NeuralNetworkGUI
             var lines = File.ReadAllLines(OFDDataSet.FileName);
             var fields = lines.First().Split(',');
 
-             dataTable = new DataTable();
+            dataTable = new DataTable();
 
             foreach (var f in fields)
             {
@@ -85,6 +90,8 @@ namespace NeuralNetworkGUI
                 }
             }
             tbPredictoras.Text = tbPredictoras.Text.Substring(0, tbPredictoras.Text.Length - 2);
+
+            init = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -98,6 +105,8 @@ namespace NeuralNetworkGUI
                 }
             }
             tbObjetivos.Text = tbObjetivos.Text.Substring(0, tbObjetivos.Text.Length - 2);
+
+            init = false;
         }
 
         private void perdidaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -107,42 +116,112 @@ namespace NeuralNetworkGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
-            var predictFields = tbPredictoras.Text.Split(',').ToList();
-            var targetFields = tbObjetivos.Text.Split(',').ToList();
+            if (!init)
+            {
+                predictFields = tbPredictoras.Text.Split(',').ToList();
+                targetFields = tbObjetivos.Text.Split(',').ToList();
+            }
 
-            double[][] X = new double[dataTable.Rows.Count][];
-            double[][] Y = new double[dataTable.Rows.Count][];
+            int countTest = int.Parse(tbTest.Text);
+            X = new double[dataTable.Rows.Count][];
+            Y = new double[dataTable.Rows.Count][];
+            Xtest = new double[countTest][];
+            Ytest = new double[countTest][];
+            Ypred = new double[countTest][];
 
             int index = 0;
-            foreach (DataRow r in dataTable.Rows)
-            {   
-                var Xlist = new List<double>();
-                var Ylist = new List<double>();
+            //inizializar valores X Y
+            var rand = new Random();
+            var result = dataTable.AsEnumerable().OrderBy(r => rand.Next());
+            foreach (DataRow r in result)
+            {
+                var tmpX = new List<double>();
+                var tmpY = new List<double>();
 
                 foreach (var f in predictFields)
                 {
-                    Xlist.Add(Convert.ToDouble(r[f].ToString()));
+                    tmpX.Add(Convert.ToDouble(r[f.Trim()].ToString()));
                 }
 
                 foreach (var f in targetFields)
                 {
-                    Ylist.Add(Convert.ToDouble(r[f].ToString()));
+                    tmpY.Add(Convert.ToDouble(r[f.Trim()].ToString()));
                 }
 
-                X[index] = Xlist.ToArray();
-                Y[index] = Ylist.ToArray();
+                X[index] = tmpX.ToArray();
+                Y[index] = tmpY.ToArray();
 
-                index++;  
+                index++;
             }
+            //separar en train y test
+            var Xlist = X.ToList();
+            var Ylist = Y.ToList();
+            for (int i = 0; i < countTest; i++)
+            {
+                Xtest[i] = Xlist[i];
+                Xlist.RemoveAt(i);
+
+                Ytest[i] = Ylist[i];
+                Ylist.RemoveAt(i);
+            }
+
+            X = Xlist.ToArray();
+            Y = Ylist.ToArray();
+
+            if (!init)
+            {
+                InitializeNet();
+            }
+
+            try
+            {
+                model = nn.Fit(X, Y);
+
+                MessageBox.Show("Entrenamiento Completado");
+
+                for (int i = 0; i < Ytest.Length; i++)
+                {
+                    Ypred[i] = nn.Predict(Xtest[i]);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private void InitializeNet()
+        {
+            int epoch = int.Parse(tbEpoch.Text);
+            int batches = int.Parse(tbBatches.Text);
+            double leraningRate = double.Parse(tbLearningRate.Text);
 
             var layers = new List<Layer>(){
             new Layer(X.First().Length),
-            new Layer(16),
+            new Layer(X.First().Length * 2),
             new Layer(Y.First().Length)
             };
-            nn = new NeuralNetworkBase(layers, 0.00000001, 200, "MSE", false, 20);
+            nn = new NeuralNetworkBase(layers, leraningRate, epoch, "MSE", false, batches);
 
-            model = nn.Fit(X, Y);
+            init = true;
+        }
+
+        private void ToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            var dr = MessageBox.Show("Esta accion eliminara los pesos asociados al modelo de RN",
+                                        "Esta seguro que desea reiniciar este modelo?", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes) InitializeNet();
+        }
+
+        private void YVsYpredToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new PredCharForm(Ytest, Ypred).ShowDialog();
+        }
+
+        private void YVsYpredDetalleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new PredGridForm(Ytest, Ypred).ShowDialog();
         }
     }
 }

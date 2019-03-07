@@ -47,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PredCharForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PredCharForm.Designer.cs">
+      <DependentUpon>PredCharForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LossCharForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,13 +65,25 @@
     <Compile Include="MainWindows.Designer.cs">
       <DependentUpon>MainWindows.cs</DependentUpon>
     </Compile>
+    <Compile Include="PredGridForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PredGridForm.Designer.cs">
+      <DependentUpon>PredGridForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="PredCharForm.resx">
+      <DependentUpon>PredCharForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LossCharForm.resx">
       <DependentUpon>LossCharForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindows.resx">
       <DependentUpon>MainWindows.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PredGridForm.resx">
+      <DependentUpon>PredGridForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

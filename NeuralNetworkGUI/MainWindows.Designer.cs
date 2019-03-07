@@ -35,6 +35,10 @@
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
 			this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.estadisticasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.perdidaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.yVsYpredToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.yVsYpredDetalleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.OFDDataSet = new System.Windows.Forms.OpenFileDialog();
 			this.label1 = new System.Windows.Forms.Label();
@@ -44,8 +48,14 @@
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.button3 = new System.Windows.Forms.Button();
-			this.estadisticasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.perdidaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.label3 = new System.Windows.Forms.Label();
+			this.tbEpoch = new System.Windows.Forms.TextBox();
+			this.tbBatches = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.tbLearningRate = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.tbTest = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
@@ -76,45 +86,77 @@
 			// cargarDataSetToolStripMenuItem
 			// 
 			this.cargarDataSetToolStripMenuItem.Name = "cargarDataSetToolStripMenuItem";
-			this.cargarDataSetToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+			this.cargarDataSetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.cargarDataSetToolStripMenuItem.Text = "Cargar DataSet";
 			this.cargarDataSetToolStripMenuItem.Click += new System.EventHandler(this.cargarDataSetToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(160, 22);
-			this.toolStripMenuItem2.Text = "Reiniciar Todo";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem2.Text = "Reiniciar Modelo";
+			this.toolStripMenuItem2.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(160, 22);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
 			this.toolStripMenuItem3.Text = "Guardar modelo";
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(160, 22);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
 			this.toolStripMenuItem4.Text = "Cargar Modelo";
 			// 
 			// cerrarToolStripMenuItem
 			// 
 			this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-			this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+			this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.cerrarToolStripMenuItem.Text = "Cerrar";
 			this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
+			// 
+			// estadisticasToolStripMenuItem
+			// 
+			this.estadisticasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.perdidaToolStripMenuItem,
+            this.yVsYpredToolStripMenuItem,
+            this.yVsYpredDetalleToolStripMenuItem});
+			this.estadisticasToolStripMenuItem.Name = "estadisticasToolStripMenuItem";
+			this.estadisticasToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+			this.estadisticasToolStripMenuItem.Text = "Estadisticas";
+			// 
+			// perdidaToolStripMenuItem
+			// 
+			this.perdidaToolStripMenuItem.Name = "perdidaToolStripMenuItem";
+			this.perdidaToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+			this.perdidaToolStripMenuItem.Text = "Perdida";
+			this.perdidaToolStripMenuItem.Click += new System.EventHandler(this.perdidaToolStripMenuItem_Click);
+			// 
+			// yVsYpredToolStripMenuItem
+			// 
+			this.yVsYpredToolStripMenuItem.Name = "yVsYpredToolStripMenuItem";
+			this.yVsYpredToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+			this.yVsYpredToolStripMenuItem.Text = "Y vs Ypred";
+			this.yVsYpredToolStripMenuItem.Click += new System.EventHandler(this.YVsYpredToolStripMenuItem_Click);
+			// 
+			// yVsYpredDetalleToolStripMenuItem
+			// 
+			this.yVsYpredDetalleToolStripMenuItem.Name = "yVsYpredDetalleToolStripMenuItem";
+			this.yVsYpredDetalleToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+			this.yVsYpredDetalleToolStripMenuItem.Text = "Y vs Ypred detalle";
+			this.yVsYpredDetalleToolStripMenuItem.Click += new System.EventHandler(this.YVsYpredDetalleToolStripMenuItem_Click);
 			// 
 			// dataGridView1
 			// 
 			this.dataGridView1.AllowUserToAddRows = false;
 			this.dataGridView1.AllowUserToDeleteRows = false;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridView1.Location = new System.Drawing.Point(12, 65);
+			this.dataGridView1.Location = new System.Drawing.Point(12, 27);
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.ReadOnly = true;
 			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dataGridView1.Size = new System.Drawing.Size(695, 346);
+			this.dataGridView1.Size = new System.Drawing.Size(695, 270);
 			this.dataGridView1.TabIndex = 1;
 			// 
 			// OFDDataSet
@@ -124,7 +166,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 431);
+			this.label1.Location = new System.Drawing.Point(12, 316);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(109, 13);
 			this.label1.TabIndex = 2;
@@ -133,7 +175,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(12, 463);
+			this.label2.Location = new System.Drawing.Point(12, 348);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(95, 13);
 			this.label2.TabIndex = 3;
@@ -141,21 +183,21 @@
 			// 
 			// tbPredictoras
 			// 
-			this.tbPredictoras.Location = new System.Drawing.Point(127, 428);
+			this.tbPredictoras.Location = new System.Drawing.Point(127, 313);
 			this.tbPredictoras.Name = "tbPredictoras";
 			this.tbPredictoras.Size = new System.Drawing.Size(229, 20);
 			this.tbPredictoras.TabIndex = 4;
 			// 
 			// tbObjetivos
 			// 
-			this.tbObjetivos.Location = new System.Drawing.Point(127, 460);
+			this.tbObjetivos.Location = new System.Drawing.Point(127, 345);
 			this.tbObjetivos.Name = "tbObjetivos";
 			this.tbObjetivos.Size = new System.Drawing.Size(229, 20);
 			this.tbObjetivos.TabIndex = 5;
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(362, 426);
+			this.button1.Location = new System.Drawing.Point(362, 311);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 6;
@@ -165,7 +207,7 @@
 			// 
 			// button2
 			// 
-			this.button2.Location = new System.Drawing.Point(362, 458);
+			this.button2.Location = new System.Drawing.Point(362, 343);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 23);
 			this.button2.TabIndex = 7;
@@ -175,7 +217,7 @@
 			// 
 			// button3
 			// 
-			this.button3.Location = new System.Drawing.Point(632, 426);
+			this.button3.Location = new System.Drawing.Point(632, 311);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(75, 54);
 			this.button3.TabIndex = 8;
@@ -183,26 +225,87 @@
 			this.button3.UseVisualStyleBackColor = true;
 			this.button3.Click += new System.EventHandler(this.button3_Click);
 			// 
-			// estadisticasToolStripMenuItem
+			// label3
 			// 
-			this.estadisticasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.perdidaToolStripMenuItem});
-			this.estadisticasToolStripMenuItem.Name = "estadisticasToolStripMenuItem";
-			this.estadisticasToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
-			this.estadisticasToolStripMenuItem.Text = "Estadisticas";
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(12, 395);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(38, 13);
+			this.label3.TabIndex = 9;
+			this.label3.Text = "Epoch";
 			// 
-			// perdidaToolStripMenuItem
+			// tbEpoch
 			// 
-			this.perdidaToolStripMenuItem.Name = "perdidaToolStripMenuItem";
-			this.perdidaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.perdidaToolStripMenuItem.Text = "Perdida";
-			this.perdidaToolStripMenuItem.Click += new System.EventHandler(this.perdidaToolStripMenuItem_Click);
+			this.tbEpoch.Location = new System.Drawing.Point(127, 388);
+			this.tbEpoch.Name = "tbEpoch";
+			this.tbEpoch.Size = new System.Drawing.Size(229, 20);
+			this.tbEpoch.TabIndex = 10;
+			this.tbEpoch.Text = "1";
+			// 
+			// tbBatches
+			// 
+			this.tbBatches.Location = new System.Drawing.Point(127, 414);
+			this.tbBatches.Name = "tbBatches";
+			this.tbBatches.Size = new System.Drawing.Size(229, 20);
+			this.tbBatches.TabIndex = 12;
+			this.tbBatches.Text = "1";
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(12, 421);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(46, 13);
+			this.label4.TabIndex = 11;
+			this.label4.Text = "Batches";
+			// 
+			// tbLearningRate
+			// 
+			this.tbLearningRate.Location = new System.Drawing.Point(127, 440);
+			this.tbLearningRate.Name = "tbLearningRate";
+			this.tbLearningRate.Size = new System.Drawing.Size(229, 20);
+			this.tbLearningRate.TabIndex = 14;
+			this.tbLearningRate.Text = "0.000000001";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(12, 447);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(104, 13);
+			this.label5.TabIndex = 13;
+			this.label5.Text = "Tasa de Aprendisaje";
+			// 
+			// tbTest
+			// 
+			this.tbTest.Location = new System.Drawing.Point(493, 388);
+			this.tbTest.Name = "tbTest";
+			this.tbTest.Size = new System.Drawing.Size(57, 20);
+			this.tbTest.TabIndex = 16;
+			this.tbTest.Text = "1";
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(384, 395);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(103, 13);
+			this.label6.TabIndex = 15;
+			this.label6.Text = "Registros de Prueba";
 			// 
 			// MainWindows
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(728, 497);
+			this.ClientSize = new System.Drawing.Size(728, 477);
+			this.Controls.Add(this.tbTest);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.tbLearningRate);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.tbBatches);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.tbEpoch);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
@@ -243,6 +346,16 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ToolStripMenuItem estadisticasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem perdidaToolStripMenuItem;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbEpoch;
+        private System.Windows.Forms.TextBox tbBatches;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox tbLearningRate;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ToolStripMenuItem yVsYpredToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem yVsYpredDetalleToolStripMenuItem;
+        private System.Windows.Forms.TextBox tbTest;
+        private System.Windows.Forms.Label label6;
     }
 }
 

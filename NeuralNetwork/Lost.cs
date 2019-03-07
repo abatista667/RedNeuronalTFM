@@ -1,7 +1,6 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Linq;
-using System.Reflection;
 
 namespace NeuralNetwork
 {
@@ -41,22 +40,22 @@ namespace NeuralNetwork
             return yhat.ColumnSums().ToArray().Sum() > y.ColumnSums().ToArray().Sum() ? 1 : -1; 
         }
 
-        public static Func<Matrix<double>, Matrix<double>, Matrix<double>> GetLostFunction(string name = "None")
+        public static Func<Matrix<double>, Matrix<double>, Matrix<double>> GetLostFunction(LOST name = LOST.MSE)
         {
             Func<Matrix<double>, Matrix<double>, Matrix<double>> function;
             switch (name)
             {
-                case "CrossEntropy":
+                case LOST.BINARY_CROSS_ENTROPY:
                     function = CrossEntropy;
                     break;
-                case "MSE":
+                case LOST.CATEGORICAL_CROSS_ENTROPY:
+                    function = CrossEntropy;
+                    break;
+                case LOST.MSE:
                     function = MSE;
                     break;
-                case "MAE":
+                case LOST.MAE:
                     function = MAE;
-                    break;
-                case "Basic":
-                    function = Basic;
                     break;
                 default:
                     throw new Exception("Lost Function doesn't exist");
@@ -81,5 +80,12 @@ namespace NeuralNetwork
             return function;
         }
 
+    }
+
+    enum LOST{
+    MSE,
+    MAE,
+    BINARY_CROSS_ENTROPY,
+    CATEGORICAL_CROSS_ENTROPY
     }
 }
