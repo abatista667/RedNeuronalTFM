@@ -202,7 +202,7 @@ namespace NeuralNetworkGUI
             new Layer(X.First().Length * 2),
             new Layer(Y.First().Length)
             };
-            nn = new NeuralNetworkBase(layers, leraningRate, epoch, "MSE", false, batches);
+            nn = new NeuralNetworkBase(layers, leraningRate, epoch, LOST.BINARY_CROSS_ENTROPY, false, batches);
 
             init = true;
         }

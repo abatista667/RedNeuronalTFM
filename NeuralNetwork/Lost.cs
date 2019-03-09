@@ -20,24 +20,36 @@ namespace NeuralNetwork
             return mean;
         }
 
+        private static Matrix<double> MSLE(Matrix<double> yhat, Matrix<double> y)
+        {
+            var yhat2 = yhat.Add(1).PointwiseLog();
+            var y2 = y.Add(1).PointwiseLog();
+            var sustraction = (yhat2 - y2);
+            var powered = sustraction.PointwisePower(2);
+            var vsummary = powered.RowSums();
+            var summary = M.Dense(vsummary.Count, 1, vsummary.ToArray());
+            var mean = summary.Divide(y.ColumnCount);
+
+            return mean;
+        }
+
         private static Matrix<double> MAE(Matrix<double> yhat, Matrix<double> y)
         {
             return (yhat - y).PointwiseAbs().Divide(y.RowCount);
         }
-        private static Matrix<double> CrossEntropy(Matrix<double> arg1, Matrix<double> arg2)
+        private static Matrix<double> CrossEntropy(Matrix<double> yhat, Matrix<double> y)
         {
-            return arg1;
+            var yhatLog =  yhat.PointwiseLog();
+            var yminus = 1 -y;
+            var yhatminisLog = (1 - yhat).PointwiseLog();
+            var summary = (y * yhatLog) + (yminus* yhatminisLog);
+            var mean = summary.Divide(y.ColumnCount);
+            return mean;
         }
-
-        private static Matrix<double> Basic(Matrix<double> arg1, Matrix<double> arg2)
-        {
-            return arg1 - arg2;
-        }
-
 
         private static double dMSE(Matrix<double> yhat, Matrix<double> y)
         {
-            return yhat.ColumnSums().ToArray().Sum() > y.ColumnSums().ToArray().Sum() ? 1 : -1; 
+            return yhat.ColumnSums().ToArray().Sum() > y.ColumnSums().ToArray().Sum() ? 1 : -1;
         }
 
         public static Func<Matrix<double>, Matrix<double>, Matrix<double>> GetLostFunction(LOST name = LOST.MSE)
@@ -57,21 +69,8 @@ namespace NeuralNetwork
                 case LOST.MAE:
                     function = MAE;
                     break;
-                default:
-                    throw new Exception("Lost Function doesn't exist");
-            }
-
-            return function;
-        }
-
-
-        public static Func<Matrix<double>, Matrix<double>, double> GetLostDerivationFunction(string name = "None")
-        {
-            Func<Matrix<double>, Matrix<double>, double> function;
-            switch (name)
-            {
-                case "MSE":
-                    function = dMSE;
+                case LOST.MSLE:
+                    function = MSLE;
                     break;
                 default:
                     throw new Exception("Lost Function doesn't exist");
@@ -80,12 +79,20 @@ namespace NeuralNetwork
             return function;
         }
 
+
+        public static Func<Matrix<double>, Matrix<double>, double> GetLostDerivationFunction(LOST name = LOST.MSE)
+        {
+            return dMSE;
+        }
+
     }
 
-    enum LOST{
-    MSE,
-    MAE,
-    BINARY_CROSS_ENTROPY,
-    CATEGORICAL_CROSS_ENTROPY
+    public enum LOST
+    {
+        MSE,
+        MSLE,
+        MAE,
+        BINARY_CROSS_ENTROPY,
+        CATEGORICAL_CROSS_ENTROPY
     }
 }

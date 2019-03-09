@@ -34,7 +34,7 @@ namespace NeuralNetwork.Test
             new Layer(2),
             new Layer(5)
             };
-            var nn = new NeuralNetworkBase(layers, 0.0000000000001, 50, "MSE", false);
+            var nn = new NeuralNetworkBase(layers, 0.0000000000001, 50, LOST.MSE, false);
 
             var xArr = arrayToMatrixArray(X.ToArray());
             nn.Fit(xArr, arrayToMatrixArray(Y.ToArray()));

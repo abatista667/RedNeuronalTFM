@@ -17,7 +17,7 @@ namespace NeuralNetwork
             new Layer(4, "Sigmoid"),
             new Layer(1, "Step")
             };
-            var nn = new NeuralNetworkBase(layers, 0.3, 260, "Basic", false);
+            var nn = new NeuralNetworkBase(layers, 0.3, 260, LOST.BINARY_CROSS_ENTROPY, false);
 
             double[][] X = new double[4][];
 
@@ -48,15 +48,15 @@ namespace NeuralNetwork
 
             //nn.Save(filename);
 
-            var nn2 = new NeuralNetworkBase();
-            nn2.Load(filename);
+            //var nn2 = new NeuralNetworkBase();
+            //nn2.Load(filename);
 
-            Console.WriteLine("the predicted value is:");
-            Console.WriteLine(nn2.Predict(new double[2] { 1, 1 })[0]);
-            Console.WriteLine(nn2.Predict(new double[2] { 1, 0 })[0]);
-            Console.WriteLine(nn2.Predict(new double[2] { 0, 1 })[0]);
-            Console.WriteLine(nn2.Predict(new double[2] { 0, 0 })[0]);
-            Console.Read();
+            //Console.WriteLine("the predicted value is:");
+            //Console.WriteLine(nn2.Predict(new double[2] { 1, 1 })[0]);
+            //Console.WriteLine(nn2.Predict(new double[2] { 1, 0 })[0]);
+            //Console.WriteLine(nn2.Predict(new double[2] { 0, 1 })[0]);
+            //Console.WriteLine(nn2.Predict(new double[2] { 0, 0 })[0]);
+            //Console.Read();
         }
     }
 }

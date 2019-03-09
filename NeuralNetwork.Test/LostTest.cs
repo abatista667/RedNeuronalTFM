@@ -14,7 +14,7 @@ namespace NeuralNetwork.Test
         [Test]
         public void MSETest()
         {
-            var func = Lost.GetLostFunction("MSE");
+            var func = Lost.GetLostFunction(LOST.MSE);
             MatrixBuilder<double> M = Matrix<double>.Build;
 
             var y = M.Dense(1, 2, new double[2] { 1, 0 });

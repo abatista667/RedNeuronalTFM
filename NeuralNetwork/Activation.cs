@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra;
+using System;
 using System.Reflection;
 
 namespace NeuralNetwork
@@ -54,8 +55,24 @@ namespace NeuralNetwork
 
         private static double dTanH(double dx)
         {
-            
-         return 1 -Math.Pow(dx, 2);
+
+            return 1 - Math.Pow(dx, 2);
+        }
+
+        public static Matrix<double> Softmax(Matrix<double> output)
+        {
+            var zout = output.Map(e =>
+            {
+                return Math.Exp(e);
+            });
+
+            var summary = zout.ColumnSums().Sum();
+
+            var softmax = zout.Map(e => {
+                return e / summary;
+            });
+
+            return softmax;
         }
 
 

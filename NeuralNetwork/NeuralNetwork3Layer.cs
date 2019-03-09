@@ -27,7 +27,7 @@ namespace NeuralNetwork
 
         //inicializar los valores de la red neuronal
         public NeuralNetwork3Layer(int inputNodes, int hiddenNodes, int outputNodes,
-            double learningRate = 0.001, int epoch = 100, string lost = "MSE", bool useBias = true)
+            double learningRate = 0.001, int epoch = 100, LOST lost= LOST.MSE, bool useBias = true)
         {
             _learningRate = learningRate;
             _epoch = epoch;

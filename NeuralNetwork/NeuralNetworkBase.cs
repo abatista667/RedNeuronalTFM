@@ -35,7 +35,7 @@ namespace NeuralNetwork
 
         //inicializar los valores de la red neuronal
         public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
-        string lost = "MSE", bool useBias = true, int batchSize = 200)
+        LOST lost = LOST.MSE, bool useBias = true, int batchSize = 200)
         {
             _layers = layers;
             _batchSize = batchSize;
@@ -171,8 +171,18 @@ namespace NeuralNetwork
                 //aplicar la funcion de activacion de la capa a cada uno de los valores del vector
 
                 var outPutActivated = M.DenseOfMatrix(newOutput);
-                var function = Activation.GetActivationByName(_layers[i + 1].Activation);
-                newOutput.Map(function, outPutActivated);
+                string activationName = _layers[i + 1].Activation;
+
+                var function = Activation.GetActivationByName(activationName);
+
+                if (activationName == "Softmax")
+                {
+                    outPutActivated = Activation.Softmax(newOutput);
+                }
+                else
+                {
+                    newOutput.Map(function, outPutActivated);
+                }
                 output = M.DenseOfMatrix(outPutActivated);
                 _layerOutput.Add(M.DenseOfMatrix(output));
                 newOutput = output;
@@ -206,13 +216,13 @@ namespace NeuralNetwork
                     inputT = _layerOutput[i - 1].Transpose();
                 }
 
-               // var lost = Lost.GetLostFunction("MSE");
+                // var lost = Lost.GetLostFunction("MSE");
 
                 var delta = gradient * inputT;
                 delta *= _learningRate * lostSlope;
 
-                if(lostSlope == -1)
-                Console.WriteLine("");
+                if (lostSlope == -1)
+                    Console.WriteLine("");
 
                 _weigths[i] += delta;
                 _bias[i] += gradient;
@@ -226,7 +236,7 @@ namespace NeuralNetwork
         {
             //todo: check if input len equals to 1st layer note
 
-            if(input.First().Length != _layers.First().Nodes)
+            if (input.First().Length != _layers.First().Nodes)
                 throw new Exception($"El vector de entrada no concuerda con el " +
                 $"numero de nodos de la primera capa, se esperan: {_layers.First().Nodes} nodos");
 
@@ -240,8 +250,8 @@ namespace NeuralNetwork
                 Console.WriteLine($"Epoch=[ {j + 1} / {_epoch} ]");
                 for (int i = 0; i < inputBatches.Length; i++)
                 {
-                   var e = Train(inputBatches[i], Labels[i]);
-                   errors.Add(e);
+                    var e = Train(inputBatches[i], Labels[i]);
+                    errors.Add(e);
                 }
                 Console.WriteLine($"Lost= {_totalLost}");
             }
