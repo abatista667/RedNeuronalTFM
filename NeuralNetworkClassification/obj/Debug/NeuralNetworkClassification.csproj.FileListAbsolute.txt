@@ -1,0 +1,10 @@
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\bin\Debug\NeuralNetworkClassification.exe.config
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\bin\Debug\NeuralNetworkClassification.exe
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\bin\Debug\NeuralNetworkClassification.pdb
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.csprojAssemblyReference.cache
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.MainWindows.resources
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.Properties.Resources.resources
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.csproj.GenerateResource.cache
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.csproj.CoreCompileInputs.cache
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.exe
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.pdb

@@ -39,17 +39,23 @@ namespace NeuralNetwork
         }
         private static Matrix<double> CrossEntropy(Matrix<double> yhat, Matrix<double> y)
         {
-            var yhatLog =  yhat.PointwiseLog();
-            var yminus = 1 -y;
-            var yhatminisLog = (1 - yhat).PointwiseLog();
-            var summary = (y * yhatLog) + (yminus* yhatminisLog);
-            var mean = summary.Divide(y.ColumnCount);
+            double notZero = 1e-15;
+            Func<double, double> cleanZero = v => v == 0 ? notZero : v;
+            var yhatLog = yhat.Map(cleanZero)
+                               .PointwiseLog();
+            var yminus = 1 - y;
+            var yhatminisLog = (1 - yhat).Map(cleanZero)
+                                         .PointwiseLog();
+            var summary = y.PointwiseMultiply(yhatLog) + yminus.PointwiseMultiply(yhatminisLog);
+            var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray());
+            var mean = vsummary.Divide(y.ColumnCount);
             return mean;
         }
 
         private static double dMSE(Matrix<double> yhat, Matrix<double> y)
         {
-            return yhat.ColumnSums().ToArray().Sum() > y.ColumnSums().ToArray().Sum() ? 1 : -1;
+            var val = yhat.ColumnSums().ToArray().Sum() > y.ColumnSums().ToArray().Sum() ? 1 : -1;
+            return val;
         }
 
         public static Func<Matrix<double>, Matrix<double>, Matrix<double>> GetLostFunction(LOST name = LOST.MSE)

@@ -68,32 +68,52 @@ namespace NeuralNetwork
 
             var summary = zout.ColumnSums().Sum();
 
-            var softmax = zout.Map(e => {
+            var softmax = zout.Map(e =>
+            {
                 return e / summary;
             });
 
             return softmax;
         }
 
+        public static Matrix<double> DSoftmax(Matrix<double> activated)
+        {
+            var builder = Matrix<double>.Build;
+            int rc = activated.RowCount;
+            var output = builder.Dense(rc, rc);
+            for (int i = 0; i < rc; i++)
+            {
+                for (int j = 0; j < rc; j++)
+                {
+                    if (i == j)
+                        output[i, j] = 1;
+                    else
+                        output[i, j] = 1;
+                }
+            }
 
-        public static Func<double, double> GetActivationByName(string name = "None")
+            var o = builder.Dense(output.ColumnCount,1, output.RowSums().AsArray());
+
+
+            return o;
+        }
+
+
+        public static Func<double, double> GetActivationByName(ACTIVATION name = ACTIVATION.NONE)
         {
             Func<double, double> function;
             switch (name)
             {
-                case "Relu":
+                case ACTIVATION.RELU:
                     function = Relu;
                     break;
-                case "None":
+                case ACTIVATION.NONE:
                     function = None;
                     break;
-                case "Step":
-                    function = Step;
-                    break;
-                case "Sigmoid":
+                case ACTIVATION.SIGMOID:
                     function = Sigmoid;
                     break;
-                case "Tanh":
+                case ACTIVATION.TANH:
                     function = TanH;
                     break;
                 default:
@@ -103,24 +123,21 @@ namespace NeuralNetwork
             return function;
         }
 
-        public static Func<double, double> GetActivationDerivativeByName(string name = "None")
+        public static Func<double, double> GetActivationDerivativeByName(ACTIVATION name = ACTIVATION.NONE)
         {
             Func<double, double> function;
             switch (name)
             {
-                case "Relu":
+                case ACTIVATION.RELU:
                     function = Drelu;
                     break;
-                case "None":
+                case ACTIVATION.NONE:
                     function = Dstep;
                     break;
-                case "Step":
-                    function = Dstep;
-                    break;
-                case "Sigmoid":
+                case ACTIVATION.SIGMOID:
                     function = Dsigmoid;
                     break;
-                case "Tanh":
+                case ACTIVATION.TANH:
                     function = dTanH;
                     break;
                 default:
@@ -129,5 +146,14 @@ namespace NeuralNetwork
 
             return function;
         }
+    }
+
+    public enum ACTIVATION
+    {
+        SIGMOID,
+        RELU,
+        TANH,
+        SOFTMAX,
+        NONE
     }
 }

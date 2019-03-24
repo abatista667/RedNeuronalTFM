@@ -33,15 +33,24 @@ namespace NeuralNetwork
         bool _useBias;
         int _batchSize;
 
+        OPTIMIZER _optimizer;
+
+        double _beta1, _betaa2, _epsilon;
+
         //inicializar los valores de la red neuronal
         public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
-        LOST lost = LOST.MSE, bool useBias = true, int batchSize = 200)
+        LOST lost = LOST.MSE, bool useBias = true, int batchSize = 200, OPTIMIZER optimizer = OPTIMIZER.SGD,
+        double beta1 = 0.9, double beta2 =0.999, double epsilon=1e-8)
         {
             _layers = layers;
             _batchSize = batchSize;
             _learningRate = learningRate;
             _epoch = epoch;
             _useBias = useBias;
+            _optimizer = optimizer;
+            _beta1 = beta1;
+            _betaa2 = beta2;
+            _epsilon = epsilon;
             //la primera capa es la de entrada, 
             //la cantidad de nodos corresponde a la cantidad de inputs
             _inputs = M.Dense(layers.First().Nodes, 1);
@@ -98,27 +107,7 @@ namespace NeuralNetwork
         /// </summary>
         /// <param name="input"></param>
         /// <param name="desiredOutPut"></param>
-        private void Train(double[] inputArray, double[] desiredOutPut)
-        {
-            _inputs = M.Dense(inputArray.Length, 1, inputArray);
-
-            var input = M.DenseOfMatrix(_inputs);
-            var desired = M.Dense(desiredOutPut.Length, 1, desiredOutPut);
-
-            //por cada capa de la red aplicar la suma ponderada
-            var output = FeedFordward(input);
-            //var networkLost = desired.Subtract(output);
-            var networkLost = _lostFunction(desired, output);
-
-            if (networkLost[0, 0].Equals(double.NaN) || double.IsInfinity(networkLost[0, 0]))
-                throw new LearingRateTooHighException();
-
-            _totalLost += networkLost;
-            BackPropagation(networkLost);
-        }
-
-        //use batches to train the model
-        private double Train(double[][] inputArray, double[][] desiredOutPut)
+        private double Train(double[][] inputArray, double[][] desiredOutPut, int epoch)
         {
             Matrix<double> outputMatrix = null, desiredMatrix = null;
 
@@ -154,7 +143,11 @@ namespace NeuralNetwork
             var lostSlope = _lostDerivativeFunction(desiredMatrix, outputMatrix);
 
             _totalLost += batchLoss;
-            BackPropagation(batchLoss, lostSlope);
+
+            if (_optimizer == OPTIMIZER.SGD)
+                StocasticGradientDecent(batchLoss, lostSlope);
+            else
+                Adam(batchLoss, lostSlope, epoch);
 
             return batchLoss.RowSums().ToArray().Sum();
         }
@@ -171,16 +164,15 @@ namespace NeuralNetwork
                 //aplicar la funcion de activacion de la capa a cada uno de los valores del vector
 
                 var outPutActivated = M.DenseOfMatrix(newOutput);
-                string activationName = _layers[i + 1].Activation;
+                var activationName = _layers[i + 1].Activation;
 
-                var function = Activation.GetActivationByName(activationName);
-
-                if (activationName == "Softmax")
+                if (activationName == ACTIVATION.SOFTMAX)
                 {
                     outPutActivated = Activation.Softmax(newOutput);
                 }
                 else
                 {
+                    var function = Activation.GetActivationByName(activationName);
                     newOutput.Map(function, outPutActivated);
                 }
                 output = M.DenseOfMatrix(outPutActivated);
@@ -191,14 +183,24 @@ namespace NeuralNetwork
             return output;
         }
 
-        private void BackPropagation(Matrix<double> error, double lostSlope = 1)
+        private void StocasticGradientDecent(Matrix<double> error, double lostSlope = 1)
         {
             var e = M.DenseOfMatrix(error);
 
             for (int i = _layerOutput.Count - 1; i >= 0; i--)
             {
-                var derivative = Activation.GetActivationDerivativeByName(_layers[i + 1].Activation);
-                var outputDerivated = _layerOutput[i].Map(derivative);
+                Matrix<double> outputDerivated = null;
+                var activationName = _layers[i + 1].Activation;
+                if (activationName == ACTIVATION.SOFTMAX)
+                {
+                    outputDerivated = Activation.DSoftmax(_layerOutput[i]);
+                    lostSlope = 1;
+                }
+                else
+                {
+                    var derivative = Activation.GetActivationDerivativeByName(activationName);
+                    outputDerivated = _layerOutput[i].Map(derivative);
+                }
 
                 if (i < _layerOutput.Count - 1) //no es la capa de salida
                     e = _weigths[i + 1].Transpose() * e;
@@ -207,7 +209,10 @@ namespace NeuralNetwork
                     throw new LearingRateTooHighException();
 
                 //multiplicar la pendiente de los valores de salida de la capa por el error
-                var gradient = outputDerivated.PointwiseMultiply(e);
+                Matrix<double> gradient = null;
+
+                gradient = outputDerivated.PointwiseMultiply(e);
+
 
                 var inputT = _inputs.Transpose();
 
@@ -221,8 +226,56 @@ namespace NeuralNetwork
                 var delta = gradient * inputT;
                 delta *= _learningRate * lostSlope;
 
-                if (lostSlope == -1)
-                    Console.WriteLine("");
+                _weigths[i] += delta;
+                _bias[i] += gradient;
+
+                if (_weigths[i][0, 0].Equals(double.NaN) || double.IsInfinity(_weigths[i][0, 0]))
+                    throw new LearingRateTooHighException();
+            }
+        }
+
+        private void Adam(Matrix<double> error, double lostSlope = 1, int iteration = 0)
+        {
+            var e = M.DenseOfMatrix(error);
+
+            for (int i = _layerOutput.Count - 1; i >= 0; i--)
+            {
+                Matrix<double> outputDerivated = null;
+                var activationName = _layers[i + 1].Activation;
+                if (activationName == ACTIVATION.SOFTMAX)
+                {
+                    outputDerivated = Activation.DSoftmax(_layerOutput[i]);
+                    lostSlope = 1;
+                }
+                else
+                {
+                    var derivative = Activation.GetActivationDerivativeByName(activationName);
+                    outputDerivated = _layerOutput[i].Map(derivative);
+                }
+
+                if (i < _layerOutput.Count - 1) //no es la capa de salida
+                    e = _weigths[i + 1].Transpose() * e;
+
+                if (e[0, 0].Equals(double.NaN) || double.IsInfinity(e[0, 0]))
+                    throw new LearingRateTooHighException();
+
+                //multiplicar la pendiente de los valores de salida de la capa por el error
+                Matrix<double> gradient = null;
+
+                gradient = outputDerivated.PointwiseMultiply(e);
+
+
+                var inputT = _inputs.Transpose();
+
+                if (i > 0)//no es el ultimo elemento
+                {
+                    inputT = _layerOutput[i - 1].Transpose();
+                }
+
+                // var lost = Lost.GetLostFunction("MSE");
+
+                var delta = gradient * inputT;
+                delta *= _learningRate * lostSlope;
 
                 _weigths[i] += delta;
                 _bias[i] += gradient;
@@ -247,13 +300,13 @@ namespace NeuralNetwork
             for (int j = 0; j < _epoch; j++)
             {
                 _totalLost = M.Dense(desiredOutPut[0].Length, 1);
-                Console.WriteLine($"Epoch=[ {j + 1} / {_epoch} ]");
+                //Console.WriteLine($"Epoch=[ {j + 1} / {_epoch} ]");
                 for (int i = 0; i < inputBatches.Length; i++)
                 {
-                    var e = Train(inputBatches[i], Labels[i]);
+                    var e = Train(inputBatches[i], Labels[i], j);
                     errors.Add(e);
                 }
-                Console.WriteLine($"Lost= {_totalLost}");
+                //Console.WriteLine($"Lost= {_totalLost}");
             }
 
 
@@ -282,7 +335,7 @@ namespace NeuralNetwork
 
             //Console.WriteLine(_inputs + " ");
 
-            Console.WriteLine("");
+            //Console.WriteLine("");
 
             //print layer weights
 
