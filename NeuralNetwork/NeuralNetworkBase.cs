@@ -21,6 +21,9 @@ namespace NeuralNetwork
 
         List<Matrix<double>> _layerOutput;
 
+        Dictionary<int, Matrix<double>> _momentuns = new Dictionary<int, Matrix<double>>();
+        Dictionary<int, Matrix<double>> _2momentuns = new Dictionary<int, Matrix<double>>();
+
         double _learningRate;
 
         int _epoch;
@@ -35,12 +38,12 @@ namespace NeuralNetwork
 
         OPTIMIZER _optimizer;
 
-        double _beta1, _betaa2, _epsilon;
+        double _beta1, _beta2, _epsilon;
 
         //inicializar los valores de la red neuronal
         public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
         LOST lost = LOST.MSE, bool useBias = true, int batchSize = 200, OPTIMIZER optimizer = OPTIMIZER.SGD,
-        double beta1 = 0.9, double beta2 =0.999, double epsilon=1e-8)
+        double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8)
         {
             _layers = layers;
             _batchSize = batchSize;
@@ -49,7 +52,7 @@ namespace NeuralNetwork
             _useBias = useBias;
             _optimizer = optimizer;
             _beta1 = beta1;
-            _betaa2 = beta2;
+            _beta2 = beta2;
             _epsilon = epsilon;
             //la primera capa es la de entrada, 
             //la cantidad de nodos corresponde a la cantidad de inputs
@@ -60,6 +63,7 @@ namespace NeuralNetwork
             _layerOutput = new List<Matrix<double>>();
             _lostFunction = Lost.GetLostFunction(lost);
             _lostDerivativeFunction = Lost.GetLostDerivationFunction(lost);
+
             for (int i = 0; i < layers.Count; i++)
             {
 
@@ -272,13 +276,43 @@ namespace NeuralNetwork
                     inputT = _layerOutput[i - 1].Transpose();
                 }
 
-                // var lost = Lost.GetLostFunction("MSE");
-
+                // var lost = Lost.GetLostFunction("MSE
+                Matrix<double> m = null;
+                Matrix<double> v = null;
                 var delta = gradient * inputT;
-                delta *= _learningRate * lostSlope;
 
-                _weigths[i] += delta;
-                _bias[i] += gradient;
+                if (_momentuns.ContainsKey(i))
+                {
+                    m = _momentuns[i];
+                    v = _2momentuns[i];
+                }
+                else
+                {
+                    //add momentun
+                    m = M.Dense(delta.RowCount, delta.ColumnCount, 0);
+                    v = M.Dense(delta.RowCount, delta.ColumnCount, 0);
+                    _momentuns.Add(i, m);
+                    _2momentuns.Add(i, v);
+                }
+                m = _beta1 * m + (1 - _beta1) * delta;
+                v = _beta2 * v + (1 - _beta2) * delta.PointwisePower(2);
+
+                var m_hat = m / (1 - Math.Pow(_beta1, iteration + 1));
+                var v_hat = v / (1 - Math.Pow(_beta2, iteration + 1));
+
+                _momentuns[i] = m;
+                _2momentuns[i] = v;
+
+                var newDelta = m_hat.PointwiseDivide(v_hat.PointwiseSqrt() + _epsilon);
+
+    //            vdw[j] = beta1 * vdw[j] + (1 - beta1) * dw
+    //            sdw[j] = beta2 * sdw[j] + (1 - beta2) * pow(dw, 2)
+    //            vdw_corrected = vdw[j] / (1 - pow(beta1, epoch + 1))
+    //            sdw_corrected = sdw[j] / (1 - pow(beta2, epoch + 1))
+    //            w[j] = w[j] + learningRate * (vdw_corrected / (np.sqrt(sdw_corrected) + epsilon))
+
+                _weigths[i] += lostSlope * _learningRate * newDelta;
+                _bias[i] += gradient * lostSlope;
 
                 if (_weigths[i][0, 0].Equals(double.NaN) || double.IsInfinity(_weigths[i][0, 0]))
                     throw new LearingRateTooHighException();

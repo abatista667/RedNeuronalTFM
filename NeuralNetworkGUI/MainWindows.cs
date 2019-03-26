@@ -111,7 +111,8 @@ namespace NeuralNetworkGUI
 
         private void perdidaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new LossCharForm(model.Errors.ToArray()).ShowDialog();
+            var err = model.Errors.Where(b => b< 5000).ToArray();
+            new LossCharForm(err).ShowDialog();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -173,8 +174,8 @@ namespace NeuralNetworkGUI
                 InitializeNet();
             }
 
-            try
-            {
+            //try
+            //{
                 model = nn.Fit(X, Y);
 
                 MessageBox.Show("Entrenamiento Completado");
@@ -183,11 +184,11 @@ namespace NeuralNetworkGUI
                 {
                     Ypred[i] = nn.Predict(Xtest[i]);
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
 
         }
 
@@ -202,7 +203,8 @@ namespace NeuralNetworkGUI
             new Layer(X.First().Length * 2),
             new Layer(Y.First().Length)
             };
-            nn = new NeuralNetworkBase(layers, leraningRate, epoch, LOST.MSE, false, batches);
+            nn = new NeuralNetworkBase(layers, leraningRate, epoch, LOST.MSE, false, batches,
+                                       optimizer: OPTIMIZER.ADAM);
 
             init = true;
         }

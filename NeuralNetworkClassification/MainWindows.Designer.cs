@@ -48,6 +48,8 @@
 			this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.cargarDatasetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+			this.tbHidden = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -122,16 +124,17 @@
 			// 
 			// button3
 			// 
-			this.button3.Location = new System.Drawing.Point(673, 347);
+			this.button3.Location = new System.Drawing.Point(673, 303);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(75, 54);
 			this.button3.TabIndex = 24;
 			this.button3.Text = "Entrenar";
 			this.button3.UseVisualStyleBackColor = true;
+			this.button3.Click += new System.EventHandler(this.Button3_Click);
 			// 
 			// button2
 			// 
-			this.button2.Location = new System.Drawing.Point(403, 379);
+			this.button2.Location = new System.Drawing.Point(403, 335);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 23);
 			this.button2.TabIndex = 23;
@@ -140,7 +143,7 @@
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(403, 347);
+			this.button1.Location = new System.Drawing.Point(403, 303);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 22;
@@ -149,14 +152,14 @@
 			// 
 			// tbObjetivos
 			// 
-			this.tbObjetivos.Location = new System.Drawing.Point(168, 381);
+			this.tbObjetivos.Location = new System.Drawing.Point(168, 337);
 			this.tbObjetivos.Name = "tbObjetivos";
 			this.tbObjetivos.Size = new System.Drawing.Size(229, 20);
 			this.tbObjetivos.TabIndex = 21;
 			// 
 			// tbPredictoras
 			// 
-			this.tbPredictoras.Location = new System.Drawing.Point(168, 349);
+			this.tbPredictoras.Location = new System.Drawing.Point(168, 305);
 			this.tbPredictoras.Name = "tbPredictoras";
 			this.tbPredictoras.Size = new System.Drawing.Size(229, 20);
 			this.tbPredictoras.TabIndex = 20;
@@ -164,7 +167,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(53, 384);
+			this.label2.Location = new System.Drawing.Point(53, 340);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(95, 13);
 			this.label2.TabIndex = 19;
@@ -173,7 +176,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(53, 352);
+			this.label1.Location = new System.Drawing.Point(53, 308);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(109, 13);
 			this.label1.TabIndex = 18;
@@ -184,11 +187,11 @@
 			this.dataGridView1.AllowUserToAddRows = false;
 			this.dataGridView1.AllowUserToDeleteRows = false;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridView1.Location = new System.Drawing.Point(53, 63);
+			this.dataGridView1.Location = new System.Drawing.Point(23, 39);
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.ReadOnly = true;
 			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dataGridView1.Size = new System.Drawing.Size(695, 270);
+			this.dataGridView1.Size = new System.Drawing.Size(765, 249);
 			this.dataGridView1.TabIndex = 17;
 			// 
 			// menuStrip1
@@ -220,11 +223,29 @@
 			// 
 			this.openFileDialog1.FileName = "openFileDialog1";
 			// 
+			// tbHidden
+			// 
+			this.tbHidden.Location = new System.Drawing.Point(168, 363);
+			this.tbHidden.Name = "tbHidden";
+			this.tbHidden.Size = new System.Drawing.Size(229, 20);
+			this.tbHidden.TabIndex = 35;
+			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(53, 366);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(77, 13);
+			this.label7.TabIndex = 34;
+			this.label7.Text = "Nodos Ocultos";
+			// 
 			// MainWindows
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 514);
+			this.Controls.Add(this.tbHidden);
+			this.Controls.Add(this.label7);
 			this.Controls.Add(this.tbTest);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.tbLearningRate);
@@ -275,6 +296,8 @@
         private System.Windows.Forms.ToolStripMenuItem archivoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cargarDatasetToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.TextBox tbHidden;
+        private System.Windows.Forms.Label label7;
     }
 }
 
