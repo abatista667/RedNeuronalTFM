@@ -20,6 +20,15 @@ namespace NeuralNetwork
             return mean;
         }
 
+        private static Matrix<double> SE(Matrix<double> yhat, Matrix<double> y)
+        {
+            var sustraction = (yhat - y);
+            var powered = sustraction.PointwisePower(2);
+            var vsummary = powered.RowSums();
+            var summary = M.Dense(vsummary.Count, 1, vsummary.ToArray());
+            return summary;
+        }
+
         private static Matrix<double> MSLE(Matrix<double> yhat, Matrix<double> y)
         {
             var yhat2 = yhat.Add(1).PointwiseLog();
@@ -46,13 +55,19 @@ namespace NeuralNetwork
             var yminus = 1 - y;
             var yhatminisLog = (1 - yhat).Map(cleanZero)
                                          .PointwiseLog();
-            var summary = y.PointwiseMultiply(yhatLog) + yminus.PointwiseMultiply(yhatminisLog);
+            var summary = y.Map(x => -x).PointwiseMultiply(yhatLog) - yminus.PointwiseMultiply(yhatminisLog);
             var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray());
             var mean = vsummary.Divide(y.ColumnCount);
             return mean;
         }
 
         private static double dMSE(Matrix<double> yhat, Matrix<double> y)
+        {
+            var val = yhat.ColumnSums().ToArray().Sum() > y.ColumnSums().ToArray().Sum() ? 1 : -1;
+            return val;
+        }
+
+        private static double dSE(Matrix<double> yhat, Matrix<double> y)
         {
             var val = yhat.ColumnSums().ToArray().Sum() > y.ColumnSums().ToArray().Sum() ? 1 : -1;
             return val;
@@ -78,6 +93,9 @@ namespace NeuralNetwork
                 case LOST.MSLE:
                     function = MSLE;
                     break;
+                case LOST.SE:
+                    function = SE;
+                    break;
                 default:
                     throw new Exception("Lost Function doesn't exist");
             }
@@ -88,13 +106,25 @@ namespace NeuralNetwork
 
         public static Func<Matrix<double>, Matrix<double>, double> GetLostDerivationFunction(LOST name = LOST.MSE)
         {
-            return dMSE;
+            Func<Matrix<double>, Matrix<double>, double> function;
+            switch (name)
+            {
+                case LOST.SE:
+                    function = dSE;
+                    break;
+                default:
+                    function = dMSE;
+                    break;
+            }
+
+            return function;
         }
 
     }
 
     public enum LOST
     {
+        SE,
         MSE,
         MSLE,
         MAE,

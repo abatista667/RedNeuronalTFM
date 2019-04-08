@@ -45,8 +45,9 @@ namespace NeuralNetworkGUI
                     r["Y"+i] = Y[j][i];
                     r["Ypred" + i] = Ypred[j][i];
                     r["perdida" + i] = Y[j][i] - Ypred[j][i];
-                    dt.Rows.Add(r);
+
                 }
+                dt.Rows.Add(r);
             }
 
             dataGridView1.DataSource = dt;

@@ -27,10 +27,18 @@ namespace NeuralNetworkGUI
         bool init = false;
 
         List<string> predictFields, targetFields;
+        BackgroundWorker worker;
         private void button1_Click(object sender, EventArgs e)
         {
 
 
+        }
+
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            button3.Enabled = false;
+            worker.RunWorkerAsync();
         }
 
 
@@ -111,12 +119,43 @@ namespace NeuralNetworkGUI
 
         private void perdidaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var err = model.Errors.Where(b => b< 5000).ToArray();
+            var err = model.Errors.Where(b => b < 5000).ToArray();
             new LossCharForm(err).ShowDialog();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+
+        private void BtPredict_Click(object sender, EventArgs e)
         {
+            new PredNewForm(nn, predictFields, targetFields).ShowDialog();
+        }
+
+        private void ToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.ShowDialog();
+        }
+
+        private void SaveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            nn.Save(saveFileDialog1.FileName);
+        }
+
+        private void MainWindows_Load(object sender, EventArgs e)
+        {
+            worker = new BackgroundWorker();
+            worker.DoWork += Worker_DoWork;
+            worker.RunWorkerCompleted += (object s, RunWorkerCompletedEventArgs arg) =>
+            {
+                MessageBox.Show("Entrenamiento completado");
+                button3.Enabled = true;
+                btPredict.Enabled = true;
+            };
+
+            worker.ProgressChanged += (s, args) =>{};
+        }
+
+        private void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            
             if (!init)
             {
                 predictFields = tbPredictoras.Text.Split(',').ToList();
@@ -176,19 +215,22 @@ namespace NeuralNetworkGUI
 
             //try
             //{
-                model = nn.Fit(X, Y);
+            model = nn.Fit(X, Y);
 
-                MessageBox.Show("Entrenamiento Completado");
 
-                for (int i = 0; i < Ytest.Length; i++)
-                {
-                    Ypred[i] = nn.Predict(Xtest[i]);
-                }
+            for (int i = 0; i < Ytest.Length; i++)
+            {
+                Ypred[i] = nn.Predict(Xtest[i]);
+            }
+
+
             //}
             //catch (Exception ex)
             //{
             //    MessageBox.Show(ex.Message);
             //}
+
+
 
         }
 
@@ -198,13 +240,18 @@ namespace NeuralNetworkGUI
             int batches = int.Parse(tbBatches.Text);
             double leraningRate = double.Parse(tbLearningRate.Text);
 
+            var hl = tbHidden.Text.Split(',').ToList();
+
             var layers = new List<Layer>(){
-            new Layer(X.First().Length),
-            new Layer(X.First().Length * 2),
-            new Layer(Y.First().Length)
+            new Layer(X.First().Length, ACTIVATION.SIGMOID),
             };
-            nn = new NeuralNetworkBase(layers, leraningRate, epoch, LOST.MSE, false, batches,
-                                       optimizer: OPTIMIZER.ADAM);
+
+            hl.ForEach(x => layers.Add(new Layer(int.Parse(x))));
+
+            layers.Add(new Layer(Y.First().Length, ACTIVATION.SIGMOID));
+
+            nn = new NeuralNetworkBase(layers, leraningRate, epoch, LOST.SE, false, batches,
+                                       optimizer: OPTIMIZER.SGD);
 
             init = true;
         }

@@ -53,12 +53,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Optimizers.cs" />
     <Compile Include="LearingRateTooHighException.cs" />
     <Compile Include="Lost.cs" />
     <Compile Include="Activation.cs" />
     <Compile Include="Layers.cs" />
-    <Compile Include="NeuralNetwork3Layer.cs" />
     <Compile Include="NeuralNetworkBase.cs" />
     <Compile Include="NeuralNetworkModel.cs" />
     <Compile Include="Program.cs" />

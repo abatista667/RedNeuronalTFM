@@ -1,4 +1,6 @@
-﻿namespace NeuralNetworkGUI
+﻿using System;
+
+namespace NeuralNetworkGUI
 {
     partial class MainWindows
     {
@@ -56,6 +58,11 @@
 			this.label5 = new System.Windows.Forms.Label();
 			this.tbTest = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
+			this.tbHidden = new System.Windows.Forms.TextBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.btPredict = new System.Windows.Forms.Button();
+			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
@@ -86,33 +93,34 @@
 			// cargarDataSetToolStripMenuItem
 			// 
 			this.cargarDataSetToolStripMenuItem.Name = "cargarDataSetToolStripMenuItem";
-			this.cargarDataSetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.cargarDataSetToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
 			this.cargarDataSetToolStripMenuItem.Text = "Cargar DataSet";
 			this.cargarDataSetToolStripMenuItem.Click += new System.EventHandler(this.cargarDataSetToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 22);
 			this.toolStripMenuItem2.Text = "Reiniciar Modelo";
 			this.toolStripMenuItem2.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(163, 22);
 			this.toolStripMenuItem3.Text = "Guardar modelo";
+			this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(163, 22);
 			this.toolStripMenuItem4.Text = "Cargar Modelo";
 			// 
 			// cerrarToolStripMenuItem
 			// 
 			this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-			this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
 			this.cerrarToolStripMenuItem.Text = "Cerrar";
 			this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
 			// 
@@ -228,7 +236,7 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(12, 395);
+			this.label3.Location = new System.Drawing.Point(12, 403);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(38, 13);
 			this.label3.TabIndex = 9;
@@ -236,7 +244,7 @@
 			// 
 			// tbEpoch
 			// 
-			this.tbEpoch.Location = new System.Drawing.Point(127, 388);
+			this.tbEpoch.Location = new System.Drawing.Point(127, 396);
 			this.tbEpoch.Name = "tbEpoch";
 			this.tbEpoch.Size = new System.Drawing.Size(229, 20);
 			this.tbEpoch.TabIndex = 10;
@@ -244,7 +252,7 @@
 			// 
 			// tbBatches
 			// 
-			this.tbBatches.Location = new System.Drawing.Point(127, 414);
+			this.tbBatches.Location = new System.Drawing.Point(127, 422);
 			this.tbBatches.Name = "tbBatches";
 			this.tbBatches.Size = new System.Drawing.Size(229, 20);
 			this.tbBatches.TabIndex = 12;
@@ -253,7 +261,7 @@
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(12, 421);
+			this.label4.Location = new System.Drawing.Point(12, 429);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(46, 13);
 			this.label4.TabIndex = 11;
@@ -261,7 +269,7 @@
 			// 
 			// tbLearningRate
 			// 
-			this.tbLearningRate.Location = new System.Drawing.Point(127, 440);
+			this.tbLearningRate.Location = new System.Drawing.Point(127, 448);
 			this.tbLearningRate.Name = "tbLearningRate";
 			this.tbLearningRate.Size = new System.Drawing.Size(229, 20);
 			this.tbLearningRate.TabIndex = 14;
@@ -270,7 +278,7 @@
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(12, 447);
+			this.label5.Location = new System.Drawing.Point(12, 455);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(104, 13);
 			this.label5.TabIndex = 13;
@@ -293,11 +301,55 @@
 			this.label6.TabIndex = 15;
 			this.label6.Text = "Registros de Prueba";
 			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(515, 443);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(33, 13);
+			this.label7.TabIndex = 17;
+			this.label7.Text = "MSE:";
+			// 
+			// tbHidden
+			// 
+			this.tbHidden.Location = new System.Drawing.Point(127, 371);
+			this.tbHidden.Name = "tbHidden";
+			this.tbHidden.Size = new System.Drawing.Size(229, 20);
+			this.tbHidden.TabIndex = 18;
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(12, 374);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(75, 13);
+			this.label8.TabIndex = 19;
+			this.label8.Text = "Nodos ocultos";
+			// 
+			// btPredict
+			// 
+			this.btPredict.Enabled = false;
+			this.btPredict.Location = new System.Drawing.Point(632, 371);
+			this.btPredict.Name = "btPredict";
+			this.btPredict.Size = new System.Drawing.Size(75, 54);
+			this.btPredict.TabIndex = 20;
+			this.btPredict.Text = "Predecir";
+			this.btPredict.UseVisualStyleBackColor = true;
+			this.btPredict.Click += new System.EventHandler(this.BtPredict_Click);
+			// 
+			// saveFileDialog1
+			// 
+			this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.SaveFileDialog1_FileOk);
+			// 
 			// MainWindows
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(728, 477);
+			this.ClientSize = new System.Drawing.Size(728, 493);
+			this.Controls.Add(this.btPredict);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.tbHidden);
+			this.Controls.Add(this.label7);
 			this.Controls.Add(this.tbTest);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.tbLearningRate);
@@ -318,6 +370,7 @@
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainWindows";
 			this.Text = "Multilayer Perceptrom Regressor";
+			this.Load += new System.EventHandler(this.MainWindows_Load);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
@@ -356,6 +409,11 @@
         private System.Windows.Forms.ToolStripMenuItem yVsYpredDetalleToolStripMenuItem;
         private System.Windows.Forms.TextBox tbTest;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox tbHidden;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btPredict;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 

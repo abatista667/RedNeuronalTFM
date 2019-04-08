@@ -50,6 +50,7 @@
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.tbHidden = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
+			this.label8 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -140,6 +141,7 @@
 			this.button2.TabIndex = 23;
 			this.button2.Text = "Seleccionar";
 			this.button2.UseVisualStyleBackColor = true;
+			this.button2.Click += new System.EventHandler(this.Button2_Click);
 			// 
 			// button1
 			// 
@@ -149,6 +151,7 @@
 			this.button1.TabIndex = 22;
 			this.button1.Text = "Seleccionar";
 			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.Button1_Click);
 			// 
 			// tbObjetivos
 			// 
@@ -215,13 +218,14 @@
 			// cargarDatasetToolStripMenuItem
 			// 
 			this.cargarDatasetToolStripMenuItem.Name = "cargarDatasetToolStripMenuItem";
-			this.cargarDatasetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.cargarDatasetToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
 			this.cargarDatasetToolStripMenuItem.Text = "Cargar Dataset";
 			this.cargarDatasetToolStripMenuItem.Click += new System.EventHandler(this.CargarDatasetToolStripMenuItem_Click);
 			// 
 			// openFileDialog1
 			// 
 			this.openFileDialog1.FileName = "openFileDialog1";
+			this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.OpenFileDialog1_FileOk);
 			// 
 			// tbHidden
 			// 
@@ -239,11 +243,21 @@
 			this.label7.TabIndex = 34;
 			this.label7.Text = "Nodos Ocultos";
 			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(515, 324);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(43, 13);
+			this.label8.TabIndex = 36;
+			this.label8.Text = "Perdida";
+			// 
 			// MainWindows
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 514);
+			this.Controls.Add(this.label8);
 			this.Controls.Add(this.tbHidden);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.tbTest);
@@ -266,6 +280,7 @@
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainWindows";
 			this.Text = "Multilayer Perceptron Clasificacion";
+			this.Load += new System.EventHandler(this.MainWindows_Load);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
@@ -298,6 +313,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.TextBox tbHidden;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
     }
 }
 

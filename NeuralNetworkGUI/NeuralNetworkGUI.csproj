@@ -71,6 +71,12 @@
     <Compile Include="PredGridForm.Designer.cs">
       <DependentUpon>PredGridForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PredNewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PredNewForm.Designer.cs">
+      <DependentUpon>PredNewForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="PredCharForm.resx">
@@ -84,6 +90,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PredGridForm.resx">
       <DependentUpon>PredGridForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PredNewForm.resx">
+      <DependentUpon>PredNewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

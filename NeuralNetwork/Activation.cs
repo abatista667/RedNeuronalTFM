@@ -1,4 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.Statistics;
 using System;
 using System.Reflection;
 
@@ -32,7 +33,8 @@ namespace NeuralNetwork
 
         private static double Sigmoid(double x)
         {
-            return 2 / (1 + Math.Exp(-2 * x)) - 1;
+            // return 2 / (1 + Math.Exp(-2 * x)) - 1;
+            return  1 / (1 + Math.Pow(Math.E, -x));
         }
 
         private static double Dsigmoid(double x)
@@ -40,6 +42,9 @@ namespace NeuralNetwork
             //var val = 1 - (Math.Pow(x, 2));
 
             var val = x * (1 - x);
+
+            if(val == 0) return 1;
+
             return val;
         }
 
@@ -61,9 +66,9 @@ namespace NeuralNetwork
 
         public static Matrix<double> Softmax(Matrix<double> output)
         {
-            var zout = output.Map(e =>
+            var zout = output.Map(x =>
             {
-                return Math.Exp(e);
+                return Math.Exp(x - output.Enumerate(Zeros.AllowSkip).Maximum());
             });
 
             var summary = zout.ColumnSums().Sum();

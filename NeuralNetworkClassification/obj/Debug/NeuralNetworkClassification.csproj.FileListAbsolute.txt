@@ -8,3 +8,9 @@ C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\ob
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.csproj.CoreCompileInputs.cache
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.exe
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.pdb
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\bin\Debug\NeuralNetwork.exe
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\bin\Debug\MathNet.Numerics.dll
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\bin\Debug\NeuralNetwork.pdb
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\bin\Debug\NeuralNetwork.exe.config
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\bin\Debug\MathNet.Numerics.xml
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkClassification\obj\Debug\NeuralNetworkClassification.csproj.CopyComplete

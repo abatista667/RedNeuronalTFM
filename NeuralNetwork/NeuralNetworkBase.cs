@@ -39,6 +39,7 @@ namespace NeuralNetwork
         OPTIMIZER _optimizer;
 
         double _beta1, _beta2, _epsilon;
+        private static Random rng = new Random();
 
         //inicializar los valores de la red neuronal
         public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
@@ -197,7 +198,7 @@ namespace NeuralNetwork
                 var activationName = _layers[i + 1].Activation;
                 if (activationName == ACTIVATION.SOFTMAX)
                 {
-                    outputDerivated = Activation.DSoftmax(_layerOutput[i]);
+                    outputDerivated = M.Dense(_layerOutput[i].RowCount, _layerOutput[i].ColumnCount, 1);
                     lostSlope = 1;
                 }
                 else
@@ -305,11 +306,11 @@ namespace NeuralNetwork
 
                 var newDelta = m_hat.PointwiseDivide(v_hat.PointwiseSqrt() + _epsilon);
 
-    //            vdw[j] = beta1 * vdw[j] + (1 - beta1) * dw
-    //            sdw[j] = beta2 * sdw[j] + (1 - beta2) * pow(dw, 2)
-    //            vdw_corrected = vdw[j] / (1 - pow(beta1, epoch + 1))
-    //            sdw_corrected = sdw[j] / (1 - pow(beta2, epoch + 1))
-    //            w[j] = w[j] + learningRate * (vdw_corrected / (np.sqrt(sdw_corrected) + epsilon))
+                //            vdw[j] = beta1 * vdw[j] + (1 - beta1) * dw
+                //            sdw[j] = beta2 * sdw[j] + (1 - beta2) * pow(dw, 2)
+                //            vdw_corrected = vdw[j] / (1 - pow(beta1, epoch + 1))
+                //            sdw_corrected = sdw[j] / (1 - pow(beta2, epoch + 1))
+                //            w[j] = w[j] + learningRate * (vdw_corrected / (np.sqrt(sdw_corrected) + epsilon))
 
                 _weigths[i] += lostSlope * _learningRate * newDelta;
                 _bias[i] += gradient * lostSlope;
@@ -330,17 +331,20 @@ namespace NeuralNetwork
             var inputBatches = SplitInBatches(input);
             var Labels = SplitInBatches(desiredOutPut);
             var errors = new List<double>();
+            var batchOrder = GenerateBatchOrder(inputBatches.Length);
 
             for (int j = 0; j < _epoch; j++)
             {
+                var tmpE = new List<double>();
+                ReorderList(batchOrder);
                 _totalLost = M.Dense(desiredOutPut[0].Length, 1);
                 //Console.WriteLine($"Epoch=[ {j + 1} / {_epoch} ]");
-                for (int i = 0; i < inputBatches.Length; i++)
+                foreach (var i in batchOrder)
                 {
                     var e = Train(inputBatches[i], Labels[i], j);
-                    errors.Add(e);
+                    tmpE.Add(e);
                 }
-                //Console.WriteLine($"Lost= {_totalLost}");
+                errors.Add(tmpE.Sum());
             }
 
 
@@ -354,6 +358,28 @@ namespace NeuralNetwork
             };
         }
 
+        private void ReorderList(List<int> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                int value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+
+        private List<int> GenerateBatchOrder(int v)
+        {
+            var list = new List<int>();
+            for (int i = 0; i < v; i++)
+            {
+                list.Add(i);
+            }
+            return list;
+        }
 
         public double[] Predict(double[] x)
         {

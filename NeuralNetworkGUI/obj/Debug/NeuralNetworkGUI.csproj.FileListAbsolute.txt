@@ -17,3 +17,4 @@ C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\Neu
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.LossCharForm.resources
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.PredCharForm.resources
 C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.PredGridForm.resources
+C:\Users\ariel batista\source\repos\NeuralNetwork\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.PredNewForm.resources
