@@ -17,7 +17,7 @@ namespace NeuralNetwork
             var summary = M.Dense(vsummary.Count, 1, vsummary.ToArray());
             var mean = summary.Divide(y.ColumnCount);
 
-            return mean;
+            return mean.PointwiseMultiply(dLoss(yhat, y));
         }
 
         private static Matrix<double> SE(Matrix<double> yhat, Matrix<double> y)
@@ -46,7 +46,7 @@ namespace NeuralNetwork
         {
             return (yhat - y).PointwiseAbs().Divide(y.RowCount);
         }
-        private static Matrix<double> CrossEntropy(Matrix<double> yhat, Matrix<double> y)
+        private static Matrix<double> BinaryCrossEntropy(Matrix<double> yhat, Matrix<double> y)
         {
             double notZero = 1e-15;
             Func<double, double> cleanZero = v => v == 0 ? notZero : v;
@@ -58,16 +58,28 @@ namespace NeuralNetwork
             var summary = y.Map(x => -x).PointwiseMultiply(yhatLog) - yminus.PointwiseMultiply(yhatminisLog);
             var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray());
             var mean = vsummary.Divide(y.ColumnCount);
-            return mean;
+            return mean.PointwiseMultiply(dLoss(yhat, y));
         }
 
-        private static double dMSE(Matrix<double> yhat, Matrix<double> y)
+        private static Matrix<double> MultiClassCrossEntropy(Matrix<double> y, Matrix<double> yhat)
         {
-            var val = yhat.ColumnSums().ToArray().Sum() > y.ColumnSums().ToArray().Sum() ? 1 : -1;
-            return val;
+            double notZero = 1e-15;
+            Func<double, double> cleanZero = v => v == 0 ? notZero : v;
+            var yLog = y.Map(cleanZero)
+                               .PointwiseLog();
+            var summary = yhat.PointwiseMultiply(yLog).Map(x => -x);
+            var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray());
+            var mean = vsummary.Divide(y.ColumnCount);
+            return mean.PointwiseMultiply(dLoss(y, yhat));
         }
 
-        private static double dSE(Matrix<double> yhat, Matrix<double> y)
+        private static Matrix<double> dLoss(Matrix<double> yhat, Matrix<double> y)
+        {
+            var val = (yhat.RowSums() -  y.RowSums()).Map(v => v < 0 ? -1d : 1);
+            return M.Dense(y.RowCount, 1, val.ToArray());
+        }
+
+        public static double dSE(Matrix<double> yhat, Matrix<double> y)
         {
             var val = yhat.ColumnSums().ToArray().Sum() > y.ColumnSums().ToArray().Sum() ? 1 : -1;
             return val;
@@ -79,10 +91,10 @@ namespace NeuralNetwork
             switch (name)
             {
                 case LOST.BINARY_CROSS_ENTROPY:
-                    function = CrossEntropy;
+                    function = BinaryCrossEntropy;
                     break;
                 case LOST.CATEGORICAL_CROSS_ENTROPY:
-                    function = CrossEntropy;
+                    function = MultiClassCrossEntropy;
                     break;
                 case LOST.MSE:
                     function = MSE;
@@ -113,7 +125,7 @@ namespace NeuralNetwork
                     function = dSE;
                     break;
                 default:
-                    function = dMSE;
+                    function = dSE;
                     break;
             }
 

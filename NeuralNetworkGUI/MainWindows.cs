@@ -126,7 +126,9 @@ namespace NeuralNetworkGUI
 
         private void BtPredict_Click(object sender, EventArgs e)
         {
-            new PredNewForm(nn, predictFields, targetFields).ShowDialog();
+            predictFields = tbPredictoras.Text.Split(',').ToList();
+            targetFields = tbObjetivos.Text.Split(',').ToList();
+            new PredNewForm(nn, predictFields, targetFields, dataTable).ShowDialog();
         }
 
         private void ToolStripMenuItem3_Click(object sender, EventArgs e)
@@ -234,6 +236,18 @@ namespace NeuralNetworkGUI
 
         }
 
+        private void ToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+        }
+
+        private void OpenFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            nn = new NeuralNetworkBase();
+            nn.Load(openFileDialog1.FileName);
+            btPredict.Enabled = true;
+        }
+
         private void InitializeNet()
         {
             int epoch = int.Parse(tbEpoch.Text);
@@ -243,15 +257,15 @@ namespace NeuralNetworkGUI
             var hl = tbHidden.Text.Split(',').ToList();
 
             var layers = new List<Layer>(){
-            new Layer(X.First().Length, ACTIVATION.SIGMOID),
+            new Layer(X.First().Length),
             };
 
             hl.ForEach(x => layers.Add(new Layer(int.Parse(x))));
 
-            layers.Add(new Layer(Y.First().Length, ACTIVATION.SIGMOID));
+            layers.Add(new Layer(Y.First().Length, ACTIVATION.SOFTMAX));
 
-            nn = new NeuralNetworkBase(layers, leraningRate, epoch, LOST.SE, false, batches,
-                                       optimizer: OPTIMIZER.SGD);
+            nn = new NeuralNetworkBase(layers, leraningRate, epoch, LOST.CATEGORICAL_CROSS_ENTROPY, false, batches,
+                                       optimizer: OPTIMIZER.ADAM);
 
             init = true;
         }

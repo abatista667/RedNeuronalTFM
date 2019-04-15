@@ -90,10 +90,12 @@ namespace NeuralNetwork
             {
                 for (int j = 0; j < rc; j++)
                 {
+                    var Si = activated[i, 0];
+                    var Sj = activated[j, 0];
                     if (i == j)
-                        output[i, j] = 1;
+                        output[i, j] = Si *(1 - Sj);
                     else
-                        output[i, j] = 1;
+                        output[i, j] = -Sj * Si;
                 }
             }
 
@@ -144,6 +146,9 @@ namespace NeuralNetwork
                     break;
                 case ACTIVATION.TANH:
                     function = dTanH;
+                    break;
+                case ACTIVATION.SOFTMAX:
+                    function = Dstep;
                     break;
                 default:
                     throw new Exception("La funcion de activacion no existe");

@@ -20,7 +20,7 @@ namespace NeuralNetwork
         List<Layer> _layers;
 
         List<Matrix<double>> _layerOutput;
-
+        private LOST _lost;
         Dictionary<int, Matrix<double>> _momentuns = new Dictionary<int, Matrix<double>>();
         Dictionary<int, Matrix<double>> _2momentuns = new Dictionary<int, Matrix<double>>();
 
@@ -44,7 +44,7 @@ namespace NeuralNetwork
         //inicializar los valores de la red neuronal
         public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
         LOST lost = LOST.MSE, bool useBias = true, int batchSize = 200, OPTIMIZER optimizer = OPTIMIZER.SGD,
-        double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8)
+        double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8, bool shufle = true)
         {
             _layers = layers;
             _batchSize = batchSize;
@@ -62,6 +62,7 @@ namespace NeuralNetwork
             _weigths = new List<Matrix<double>>();
             _bias = new List<Matrix<double>>();
             _layerOutput = new List<Matrix<double>>();
+            _lost = lost;
             _lostFunction = Lost.GetLostFunction(lost);
             _lostDerivativeFunction = Lost.GetLostDerivationFunction(lost);
 
@@ -199,7 +200,6 @@ namespace NeuralNetwork
                 if (activationName == ACTIVATION.SOFTMAX)
                 {
                     outputDerivated = M.Dense(_layerOutput[i].RowCount, _layerOutput[i].ColumnCount, 1);
-                    lostSlope = 1;
                 }
                 else
                 {
@@ -250,7 +250,6 @@ namespace NeuralNetwork
                 if (activationName == ACTIVATION.SOFTMAX)
                 {
                     outputDerivated = Activation.DSoftmax(_layerOutput[i]);
-                    lostSlope = 1;
                 }
                 else
                 {
@@ -269,14 +268,15 @@ namespace NeuralNetwork
 
                 gradient = outputDerivated.PointwiseMultiply(e);
 
-
                 var inputT = _inputs.Transpose();
 
                 if (i > 0)//no es el ultimo elemento
                 {
                     inputT = _layerOutput[i - 1].Transpose();
+
                 }
 
+               
                 // var lost = Lost.GetLostFunction("MSE
                 Matrix<double> m = null;
                 Matrix<double> v = null;
@@ -312,8 +312,8 @@ namespace NeuralNetwork
                 //            sdw_corrected = sdw[j] / (1 - pow(beta2, epoch + 1))
                 //            w[j] = w[j] + learningRate * (vdw_corrected / (np.sqrt(sdw_corrected) + epsilon))
 
-                _weigths[i] += lostSlope * _learningRate * newDelta;
-                _bias[i] += gradient * lostSlope;
+                _weigths[i] += _learningRate * newDelta;
+                _bias[i] += gradient;
 
                 if (_weigths[i][0, 0].Equals(double.NaN) || double.IsInfinity(_weigths[i][0, 0]))
                     throw new LearingRateTooHighException();

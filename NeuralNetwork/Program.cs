@@ -11,11 +11,15 @@ namespace NeuralNetwork
     {
         static void Main(string[] args)
         {
+            Matrix<double> output, desired;
+            MatrixBuilder<double> M = Matrix<double>.Build;
 
-            //int[] t = new int[5] { 11, 12, 13, 14, 15 };
-            //var t2 = t.ToList();
-            //NeuralNetworkBase.ReorderList(t2);
+            output = M.Dense(3,1, new double[]{0.2, 0.3, 0.5});
+            desired = M.Dense(3, 1, new double[] { 0, 1, 0 });
 
+            var loss = Lost.GetLostFunction(LOST.CATEGORICAL_CROSS_ENTROPY)(desired, output);
+            Console.WriteLine(loss);
+            //var dloss = Lost.dSE(desired, output);
             Console.Read();
         }
     }
