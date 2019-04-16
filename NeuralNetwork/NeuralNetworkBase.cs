@@ -306,12 +306,6 @@ namespace NeuralNetwork
 
                 var newDelta = m_hat.PointwiseDivide(v_hat.PointwiseSqrt() + _epsilon);
 
-                //            vdw[j] = beta1 * vdw[j] + (1 - beta1) * dw
-                //            sdw[j] = beta2 * sdw[j] + (1 - beta2) * pow(dw, 2)
-                //            vdw_corrected = vdw[j] / (1 - pow(beta1, epoch + 1))
-                //            sdw_corrected = sdw[j] / (1 - pow(beta2, epoch + 1))
-                //            w[j] = w[j] + learningRate * (vdw_corrected / (np.sqrt(sdw_corrected) + epsilon))
-
                 _weigths[i] += _learningRate * newDelta;
                 _bias[i] += gradient;
 

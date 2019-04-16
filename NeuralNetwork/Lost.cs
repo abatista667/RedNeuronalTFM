@@ -61,21 +61,46 @@ namespace NeuralNetwork
             return mean.PointwiseMultiply(dLoss(yhat, y));
         }
 
+        //private static Matrix<double> MultiClassCrossEntropy(Matrix<double> y, Matrix<double> yhat)
+        //{
+        //    double notZero = 1e-15;
+        //    Func<double, double> cleanZero = v => v == 0 ? notZero : v;
+        //    var yhatLog = yhat.Map(cleanZero)
+        //                       .PointwiseLog();
+        //    var summary = y.PointwiseMultiply(yhatLog).Map(x => -x);
+        //    var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray());
+        //    var mean = vsummary.Divide(y.ColumnCount);
+        //    mean = mean.Map(x => mean.RowSums().Sum());
+        //    var d = dSE(y, yhat);
+        //    return mean *d;
+        //}
+
         private static Matrix<double> MultiClassCrossEntropy(Matrix<double> y, Matrix<double> yhat)
         {
             double notZero = 1e-15;
             Func<double, double> cleanZero = v => v == 0 ? notZero : v;
-            var yLog = y.Map(cleanZero)
-                               .PointwiseLog();
-            var summary = yhat.PointwiseMultiply(yLog).Map(x => -x);
+
+            Matrix<double> summary = M.Dense(y.RowCount, y.ColumnCount);
+
+            Func<double, double, double> map2 = (v, vy) =>
+            {
+                if (vy == 1)
+                    return -Math.Log(v, 2);
+                else
+                    return -Math.Log(1 - v, 2);
+            };
+
+            yhat.Map2(map2, y, summary);
+
             var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray());
             var mean = vsummary.Divide(y.ColumnCount);
-            return mean.PointwiseMultiply(dLoss(y, yhat));
+            var d = dLoss(y, yhat);
+            return mean.PointwiseMultiply(d);
         }
 
         private static Matrix<double> dLoss(Matrix<double> yhat, Matrix<double> y)
         {
-            var val = (yhat.RowSums() -  y.RowSums()).Map(v => v < 0 ? -1d : 1);
+            var val = (yhat.RowSums() - y.RowSums()).Map(v => v < 0 ? -1d : 1);
             return M.Dense(y.RowCount, 1, val.ToArray());
         }
 
