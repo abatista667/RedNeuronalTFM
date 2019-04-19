@@ -1,5 +1,6 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NeuralNetwork
@@ -130,28 +131,8 @@ namespace NeuralNetwork
                 case LOST.MSLE:
                     function = MSLE;
                     break;
-                case LOST.SE:
-                    function = SE;
-                    break;
                 default:
                     throw new Exception("Lost Function doesn't exist");
-            }
-
-            return function;
-        }
-
-
-        public static Func<Matrix<double>, Matrix<double>, double> GetLostDerivationFunction(LOST name = LOST.MSE)
-        {
-            Func<Matrix<double>, Matrix<double>, double> function;
-            switch (name)
-            {
-                case LOST.SE:
-                    function = dSE;
-                    break;
-                default:
-                    function = dSE;
-                    break;
             }
 
             return function;
@@ -161,11 +142,21 @@ namespace NeuralNetwork
 
     public enum LOST
     {
-        SE,
         MSE,
         MSLE,
         MAE,
         BINARY_CROSS_ENTROPY,
         CATEGORICAL_CROSS_ENTROPY
+    }
+
+    public class Losses
+    {
+        public static Dictionary<string, LOST> ByName { get; set; } = new Dictionary<string, LOST>
+        {
+            {"MSE", LOST.MSE},
+            {"MSLE", LOST.MSLE},
+            {"Binary Cross Entropy", LOST.BINARY_CROSS_ENTROPY},
+            {"Categorical Cross Entropy", LOST.CATEGORICAL_CROSS_ENTROPY},
+        };
     }
 }

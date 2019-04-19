@@ -64,10 +64,10 @@ namespace NeuralNetworkGUI
 			this.btPredict = new System.Windows.Forms.Button();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.label9 = new System.Windows.Forms.Label();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.cbActivation = new System.Windows.Forms.ComboBox();
 			this.label10 = new System.Windows.Forms.Label();
-			this.comboBox2 = new System.Windows.Forms.ComboBox();
-			this.comboBox3 = new System.Windows.Forms.ComboBox();
+			this.cbActivationHidden = new System.Windows.Forms.ComboBox();
+			this.cbLoss = new System.Windows.Forms.ComboBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.menuStrip1.SuspendLayout();
@@ -100,35 +100,35 @@ namespace NeuralNetworkGUI
 			// cargarDataSetToolStripMenuItem
 			// 
 			this.cargarDataSetToolStripMenuItem.Name = "cargarDataSetToolStripMenuItem";
-			this.cargarDataSetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.cargarDataSetToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
 			this.cargarDataSetToolStripMenuItem.Text = "Cargar DataSet";
 			this.cargarDataSetToolStripMenuItem.Click += new System.EventHandler(this.cargarDataSetToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 22);
 			this.toolStripMenuItem2.Text = "Reiniciar Modelo";
 			this.toolStripMenuItem2.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(163, 22);
 			this.toolStripMenuItem3.Text = "Guardar modelo";
 			this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(163, 22);
 			this.toolStripMenuItem4.Text = "Cargar Modelo";
 			this.toolStripMenuItem4.Click += new System.EventHandler(this.ToolStripMenuItem4_Click);
 			// 
 			// cerrarToolStripMenuItem
 			// 
 			this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-			this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
 			this.cerrarToolStripMenuItem.Text = "Cerrar";
 			this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
 			// 
@@ -358,19 +358,20 @@ namespace NeuralNetworkGUI
 			this.label9.TabIndex = 21;
 			this.label9.Text = "Activacion";
 			// 
-			// comboBox1
+			// cbActivation
 			// 
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Items.AddRange(new object[] {
-            "ninguno",
+			this.cbActivation.FormattingEnabled = true;
+			this.cbActivation.Items.AddRange(new object[] {
+            "Ninguno",
             "Sigmoide",
             "Relu",
             "Tanh",
             "Softmax"});
-			this.comboBox1.Location = new System.Drawing.Point(127, 484);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(229, 21);
-			this.comboBox1.TabIndex = 22;
+			this.cbActivation.Location = new System.Drawing.Point(127, 484);
+			this.cbActivation.Name = "cbActivation";
+			this.cbActivation.Size = new System.Drawing.Size(229, 21);
+			this.cbActivation.TabIndex = 22;
+			this.cbActivation.Text = "Ninguno";
 			// 
 			// label10
 			// 
@@ -381,31 +382,35 @@ namespace NeuralNetworkGUI
 			this.label10.TabIndex = 23;
 			this.label10.Text = "Act Capa Ocultas";
 			// 
-			// comboBox2
+			// cbActivationHidden
 			// 
-			this.comboBox2.FormattingEnabled = true;
-			this.comboBox2.Items.AddRange(new object[] {
-            "ninguno",
+			this.cbActivationHidden.FormattingEnabled = true;
+			this.cbActivationHidden.Items.AddRange(new object[] {
+            "Ninguno",
             "Sigmoide",
             "Relu",
             "Tanh",
             "Softmax"});
-			this.comboBox2.Location = new System.Drawing.Point(127, 515);
-			this.comboBox2.Name = "comboBox2";
-			this.comboBox2.Size = new System.Drawing.Size(229, 21);
-			this.comboBox2.TabIndex = 24;
+			this.cbActivationHidden.Location = new System.Drawing.Point(127, 515);
+			this.cbActivationHidden.Name = "cbActivationHidden";
+			this.cbActivationHidden.Size = new System.Drawing.Size(229, 21);
+			this.cbActivationHidden.TabIndex = 24;
+			this.cbActivationHidden.Text = "Ninguno";
 			// 
-			// comboBox3
+			// cbLoss
 			// 
-			this.comboBox3.FormattingEnabled = true;
-			this.comboBox3.Items.AddRange(new object[] {
+			this.cbLoss.FormattingEnabled = true;
+			this.cbLoss.Items.AddRange(new object[] {
             "MSE",
             "MAE",
-            "CrossEntropy"});
-			this.comboBox3.Location = new System.Drawing.Point(127, 542);
-			this.comboBox3.Name = "comboBox3";
-			this.comboBox3.Size = new System.Drawing.Size(229, 21);
-			this.comboBox3.TabIndex = 26;
+            "MSLE",
+            "BinaryCrossEntropy",
+            "CategoricalCrossEntropy"});
+			this.cbLoss.Location = new System.Drawing.Point(127, 542);
+			this.cbLoss.Name = "cbLoss";
+			this.cbLoss.Size = new System.Drawing.Size(229, 21);
+			this.cbLoss.TabIndex = 26;
+			this.cbLoss.Text = "MSE";
 			// 
 			// label11
 			// 
@@ -426,11 +431,11 @@ namespace NeuralNetworkGUI
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(728, 604);
-			this.Controls.Add(this.comboBox3);
+			this.Controls.Add(this.cbLoss);
 			this.Controls.Add(this.label11);
-			this.Controls.Add(this.comboBox2);
+			this.Controls.Add(this.cbActivationHidden);
 			this.Controls.Add(this.label10);
-			this.Controls.Add(this.comboBox1);
+			this.Controls.Add(this.cbActivation);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.btPredict);
 			this.Controls.Add(this.label8);
@@ -501,10 +506,10 @@ namespace NeuralNetworkGUI
         private System.Windows.Forms.Button btPredict;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cbActivation;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.ComboBox cbActivationHidden;
+        private System.Windows.Forms.ComboBox cbLoss;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }

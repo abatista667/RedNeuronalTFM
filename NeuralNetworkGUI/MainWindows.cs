@@ -256,16 +256,21 @@ namespace NeuralNetworkGUI
 
             var hl = tbHidden.Text.Split(',').ToList();
 
+            ACTIVATION activationOutput = Activation.ByName[cbActivation.SelectedText];
+            ACTIVATION activationHidden = Activation.ByName[cbActivationHidden.SelectedText];
+            LOST loss = Losses.ByName[cbLoss.SelectedText];
+            OPTIMIZER optimizer = Optimizers.ByName[cbLoss.SelectedText];
+
             var layers = new List<Layer>(){
             new Layer(X.First().Length),
             };
 
-            hl.ForEach(x => layers.Add(new Layer(int.Parse(x))));
+            hl.ForEach(x => layers.Add(new Layer(int.Parse(x), activationHidden)));
 
-            layers.Add(new Layer(Y.First().Length, ACTIVATION.SOFTMAX));
+            layers.Add(new Layer(Y.First().Length, activationOutput));
 
-            nn = new NeuralNetworkBase(layers, leraningRate, epoch, LOST.CATEGORICAL_CROSS_ENTROPY, false, batches,
-                                       optimizer: OPTIMIZER.ADAM);
+            nn = new NeuralNetworkBase(layers, leraningRate, epoch, loss, false, batches,
+                                       optimizer: optimizer);
 
             init = true;
         }

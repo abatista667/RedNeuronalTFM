@@ -31,7 +31,6 @@ namespace NeuralNetwork
         Matrix<double> _totalLost;
 
         Func<Matrix<double>, Matrix<double>, Matrix<double>> _lostFunction;
-        Func<Matrix<double>, Matrix<double>, double> _lostDerivativeFunction;
         readonly MatrixBuilder<double> M = Matrix<double>.Build;
         bool _useBias;
         int _batchSize;
@@ -64,7 +63,6 @@ namespace NeuralNetwork
             _layerOutput = new List<Matrix<double>>();
             _lost = lost;
             _lostFunction = Lost.GetLostFunction(lost);
-            _lostDerivativeFunction = Lost.GetLostDerivationFunction(lost);
 
             for (int i = 0; i < layers.Count; i++)
             {
@@ -146,14 +144,13 @@ namespace NeuralNetwork
 
             //var networkLost = desired.Subtract(output);
             var batchLoss = _lostFunction(desiredMatrix, outputMatrix);
-            var lostSlope = _lostDerivativeFunction(desiredMatrix, outputMatrix);
 
             _totalLost += batchLoss;
 
             if (_optimizer == OPTIMIZER.SGD)
-                StocasticGradientDecent(batchLoss, lostSlope);
+                StocasticGradientDecent(batchLoss);
             else
-                Adam(batchLoss, lostSlope, epoch);
+                Adam(batchLoss, epoch);
 
             return batchLoss.RowSums().ToArray().Sum();
         }
@@ -229,7 +226,7 @@ namespace NeuralNetwork
                 // var lost = Lost.GetLostFunction("MSE");
 
                 var delta = gradient * inputT;
-                delta *= _learningRate * lostSlope;
+                delta *= _learningRate;
 
                 _weigths[i] += delta;
                 _bias[i] += gradient;

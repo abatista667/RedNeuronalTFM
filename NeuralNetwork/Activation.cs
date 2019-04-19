@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Statistics;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace NeuralNetwork
@@ -64,7 +65,7 @@ namespace NeuralNetwork
             return 1 - Math.Pow(dx, 2);
         }
 
-        public static Matrix<double> Softmax(Matrix<double> output)
+        internal static Matrix<double> Softmax(Matrix<double> output)
         {
             var zout = output.Map(x =>
             {
@@ -81,7 +82,7 @@ namespace NeuralNetwork
             return softmax;
         }
 
-        public static Matrix<double> DSoftmax(Matrix<double> activated)
+        internal static Matrix<double> DSoftmax(Matrix<double> activated)
         {
             var builder = Matrix<double>.Build;
             int rc = activated.RowCount;
@@ -106,7 +107,7 @@ namespace NeuralNetwork
         }
 
 
-        public static Func<double, double> GetActivationByName(ACTIVATION name = ACTIVATION.NONE)
+        internal static Func<double, double> GetActivationByName(ACTIVATION name = ACTIVATION.NONE)
         {
             Func<double, double> function;
             switch (name)
@@ -130,7 +131,7 @@ namespace NeuralNetwork
             return function;
         }
 
-        public static Func<double, double> GetActivationDerivativeByName(ACTIVATION name = ACTIVATION.NONE)
+        internal static Func<double, double> GetActivationDerivativeByName(ACTIVATION name = ACTIVATION.NONE)
         {
             Func<double, double> function;
             switch (name)
@@ -156,6 +157,16 @@ namespace NeuralNetwork
 
             return function;
         }
+
+
+        public static Dictionary<string, ACTIVATION> ByName { get; set; } = new Dictionary<string, ACTIVATION>
+        {
+            {"Ninguno", ACTIVATION.NONE},
+            {"Relu", ACTIVATION.RELU},
+            {"Sigmoide", ACTIVATION.SIGMOID},
+            {"Softmax", ACTIVATION.SOFTMAX},
+            {"Tanh", ACTIVATION.TANH},
+        };
     }
 
     public enum ACTIVATION
