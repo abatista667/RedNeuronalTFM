@@ -335,7 +335,7 @@ namespace NeuralNetwork
                     var e = Train(inputBatches[i], Labels[i], j);
                     tmpE.Add(e);
                 }
-                errors.Add(tmpE.Sum());
+                errors.Add(Math.Abs(tmpE.Sum()));
             }
 
 

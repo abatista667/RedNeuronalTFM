@@ -26,6 +26,11 @@ namespace NeuralNetworkGUI
         double[][] Ypred;
         bool init = false;
 
+        ACTIVATION activationOutput;
+        ACTIVATION activationHidden;
+        LOST loss;
+        OPTIMIZER optimizer;
+
         List<string> predictFields, targetFields;
         BackgroundWorker worker;
         private void button1_Click(object sender, EventArgs e)
@@ -38,6 +43,11 @@ namespace NeuralNetworkGUI
         private void button3_Click(object sender, EventArgs e)
         {
             button3.Enabled = false;
+
+            activationOutput = Activation.ByName[cbActivation.Text];
+            activationHidden = Activation.ByName[cbActivationHidden.Text];
+            loss = Losses.ByName[cbLoss.Text];
+            optimizer = Optimizers.ByName[cbOptimizer.Text];
             worker.RunWorkerAsync();
         }
 
@@ -152,12 +162,12 @@ namespace NeuralNetworkGUI
                 btPredict.Enabled = true;
             };
 
-            worker.ProgressChanged += (s, args) =>{};
+            worker.ProgressChanged += (s, args) => { };
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            
+
             if (!init)
             {
                 predictFields = tbPredictoras.Text.Split(',').ToList();
@@ -256,11 +266,6 @@ namespace NeuralNetworkGUI
 
             var hl = tbHidden.Text.Split(',').ToList();
 
-            ACTIVATION activationOutput = Activation.ByName[cbActivation.SelectedText];
-            ACTIVATION activationHidden = Activation.ByName[cbActivationHidden.SelectedText];
-            LOST loss = Losses.ByName[cbLoss.SelectedText];
-            OPTIMIZER optimizer = Optimizers.ByName[cbLoss.SelectedText];
-
             var layers = new List<Layer>(){
             new Layer(X.First().Length),
             };
@@ -279,7 +284,11 @@ namespace NeuralNetworkGUI
         {
             var dr = MessageBox.Show("Esta accion eliminara los pesos asociados al modelo de RN",
                                         "Esta seguro que desea reiniciar este modelo?", MessageBoxButtons.YesNo);
-            if (dr == DialogResult.Yes) InitializeNet();
+            if (dr == DialogResult.Yes)
+            {
+                init = false;
+                nn = null;
+            }
         }
 
         private void YVsYpredToolStripMenuItem_Click(object sender, EventArgs e)

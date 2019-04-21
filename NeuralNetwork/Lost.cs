@@ -40,12 +40,18 @@ namespace NeuralNetwork
             var summary = M.Dense(vsummary.Count, 1, vsummary.ToArray());
             var mean = summary.Divide(y.ColumnCount);
 
-            return mean;
+            return mean.PointwiseMultiply(dLoss(yhat, y));
         }
 
         private static Matrix<double> MAE(Matrix<double> yhat, Matrix<double> y)
         {
-            return (yhat - y).PointwiseAbs().Divide(y.RowCount);
+            var sustraction = (yhat - y);
+            var abs = sustraction.PointwiseAbs();
+            var vsummary = abs.RowSums();
+            var summary = M.Dense(vsummary.Count, 1, vsummary.ToArray());
+            var mean = summary.Divide(y.ColumnCount);
+
+            return mean.PointwiseMultiply(dLoss(yhat, y));
         }
         private static Matrix<double> BinaryCrossEntropy(Matrix<double> yhat, Matrix<double> y)
         {
@@ -155,8 +161,9 @@ namespace NeuralNetwork
         {
             {"MSE", LOST.MSE},
             {"MSLE", LOST.MSLE},
-            {"Binary Cross Entropy", LOST.BINARY_CROSS_ENTROPY},
-            {"Categorical Cross Entropy", LOST.CATEGORICAL_CROSS_ENTROPY},
+            {"MAE", LOST.MAE},
+            {"BinaryCrossEntropy", LOST.BINARY_CROSS_ENTROPY},
+            {"CategoricalCrossEntropy", LOST.CATEGORICAL_CROSS_ENTROPY},
         };
     }
 }

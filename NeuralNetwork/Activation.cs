@@ -15,7 +15,7 @@ namespace NeuralNetwork
         }
         private static double Drelu(double x)
         {
-            return x < 0 ? 0 : 1;
+            return 1;
         }
         private static double None(double arg)
         {
@@ -35,7 +35,7 @@ namespace NeuralNetwork
         private static double Sigmoid(double x)
         {
             // return 2 / (1 + Math.Exp(-2 * x)) - 1;
-            return  1 / (1 + Math.Pow(Math.E, -x));
+            return 1 / (1 + Math.Pow(Math.E, -x));
         }
 
         private static double Dsigmoid(double x)
@@ -44,7 +44,7 @@ namespace NeuralNetwork
 
             var val = x * (1 - x);
 
-            if(val == 0) return 1;
+            if (val == 0) return 1;
 
             return val;
         }
@@ -94,13 +94,13 @@ namespace NeuralNetwork
                     var Si = activated[i, 0];
                     var Sj = activated[j, 0];
                     if (i == j)
-                        output[i, j] = Si *(1 - Sj);
+                        output[i, j] = Si * (1 - Sj);
                     else
                         output[i, j] = -Sj * Si;
                 }
             }
 
-            var o = builder.Dense(output.ColumnCount,1, output.RowSums().AsArray());
+            var o = builder.Dense(output.ColumnCount, 1, output.RowSums().AsArray());
 
 
             return o;
@@ -161,6 +161,7 @@ namespace NeuralNetwork
 
         public static Dictionary<string, ACTIVATION> ByName { get; set; } = new Dictionary<string, ACTIVATION>
         {
+            {"", ACTIVATION.NONE},
             {"Ninguno", ACTIVATION.NONE},
             {"Relu", ACTIVATION.RELU},
             {"Sigmoide", ACTIVATION.SIGMOID},

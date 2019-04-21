@@ -70,6 +70,8 @@ namespace NeuralNetworkGUI
 			this.cbLoss = new System.Windows.Forms.ComboBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+			this.cbOptimizer = new System.Windows.Forms.ComboBox();
+			this.label12 = new System.Windows.Forms.Label();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
@@ -426,11 +428,34 @@ namespace NeuralNetworkGUI
 			this.openFileDialog1.FileName = "openFileDialog1";
 			this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.OpenFileDialog1_FileOk);
 			// 
+			// cbOptimizer
+			// 
+			this.cbOptimizer.FormattingEnabled = true;
+			this.cbOptimizer.Items.AddRange(new object[] {
+            "ADAM",
+            "SGD"});
+			this.cbOptimizer.Location = new System.Drawing.Point(127, 571);
+			this.cbOptimizer.Name = "cbOptimizer";
+			this.cbOptimizer.Size = new System.Drawing.Size(229, 21);
+			this.cbOptimizer.TabIndex = 28;
+			this.cbOptimizer.Text = "ADAM";
+			// 
+			// label12
+			// 
+			this.label12.AutoSize = true;
+			this.label12.Location = new System.Drawing.Point(12, 574);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(62, 13);
+			this.label12.TabIndex = 27;
+			this.label12.Text = "Optimizador";
+			// 
 			// MainWindows
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(728, 604);
+			this.Controls.Add(this.cbOptimizer);
+			this.Controls.Add(this.label12);
 			this.Controls.Add(this.cbLoss);
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.cbActivationHidden);
@@ -512,6 +537,8 @@ namespace NeuralNetworkGUI
         private System.Windows.Forms.ComboBox cbLoss;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ComboBox cbOptimizer;
+        private System.Windows.Forms.Label label12;
     }
 }
 
