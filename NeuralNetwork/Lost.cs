@@ -5,11 +5,20 @@ using System.Linq;
 
 namespace NeuralNetwork
 {
-    //implementacion de la funcion de activacion
+    //implementacion de la funcion de perdida
     public class Lost
     {
+    /// <summary>
+    /// variable que sirve para instaciar matrices
+    /// </summary>
         readonly static MatrixBuilder<double> M = Matrix<double>.Build;
 
+        /// <summary>
+        /// funcion de perdida Error cuadratico medio
+        /// </summary>
+        /// <param name="yhat">valor predicho</param>
+        /// <param name="y">valor esperado</param>
+        /// <returns></returns>
         private static Matrix<double> MSE(Matrix<double> yhat, Matrix<double> y)
         {
             var sustraction = (yhat - y);
@@ -21,6 +30,12 @@ namespace NeuralNetwork
             return mean.PointwiseMultiply(dLoss(yhat, y));
         }
 
+        /// <summary>
+        /// funcion de perdida error cuadratico
+        /// </summary>
+        /// <param name="yhat"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private static Matrix<double> SE(Matrix<double> yhat, Matrix<double> y)
         {
             var sustraction = (yhat - y);
@@ -29,7 +44,12 @@ namespace NeuralNetwork
             var summary = M.Dense(vsummary.Count, 1, vsummary.ToArray());
             return summary;
         }
-
+        /// <summary>
+        /// funcion de perdida error logaritmico cuadriatico medio
+        /// </summary>
+        /// <param name="yhat">valor predicho</param>
+        /// <param name="y">valor esperado</param>
+        /// <returns></returns>
         private static Matrix<double> MSLE(Matrix<double> yhat, Matrix<double> y)
         {
             var yhat2 = yhat.Add(1).PointwiseLog();
@@ -43,6 +63,12 @@ namespace NeuralNetwork
             return mean.PointwiseMultiply(dLoss(yhat, y));
         }
 
+        /// <summary>
+        /// funcion de perdida error absoluto medio
+        /// </summary>
+        /// <param name="yhat"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private static Matrix<double> MAE(Matrix<double> yhat, Matrix<double> y)
         {
             var sustraction = (yhat - y);
@@ -53,6 +79,12 @@ namespace NeuralNetwork
 
             return mean.PointwiseMultiply(dLoss(yhat, y));
         }
+        /// <summary>
+        /// funcion de perdida cross entropia binaria
+        /// </summary>
+        /// <param name="yhat"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private static Matrix<double> BinaryCrossEntropy(Matrix<double> yhat, Matrix<double> y)
         {
             double notZero = 1e-15;
@@ -68,20 +100,12 @@ namespace NeuralNetwork
             return mean.PointwiseMultiply(dLoss(yhat, y));
         }
 
-        //private static Matrix<double> MultiClassCrossEntropy(Matrix<double> y, Matrix<double> yhat)
-        //{
-        //    double notZero = 1e-15;
-        //    Func<double, double> cleanZero = v => v == 0 ? notZero : v;
-        //    var yhatLog = yhat.Map(cleanZero)
-        //                       .PointwiseLog();
-        //    var summary = y.PointwiseMultiply(yhatLog).Map(x => -x);
-        //    var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray());
-        //    var mean = vsummary.Divide(y.ColumnCount);
-        //    mean = mean.Map(x => mean.RowSums().Sum());
-        //    var d = dSE(y, yhat);
-        //    return mean *d;
-        //}
-
+        /// <summary>
+        /// valor de perdida cross entropia multiclase
+        /// </summary>
+        /// <param name="y"></param>
+        /// <param name="yhat"></param>
+        /// <returns></returns>
         private static Matrix<double> MultiClassCrossEntropy(Matrix<double> y, Matrix<double> yhat)
         {
             double notZero = 1e-15;
@@ -105,18 +129,23 @@ namespace NeuralNetwork
             return mean.PointwiseMultiply(d);
         }
 
+        /// <summary>
+        /// funcion que determina el signo de la perdida + o - en cada uno de los nodos
+        /// </summary>
+        /// <param name="yhat"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private static Matrix<double> dLoss(Matrix<double> yhat, Matrix<double> y)
         {
             var val = (yhat.RowSums() - y.RowSums()).Map(v => v < 0 ? -1d : 1);
             return M.Dense(y.RowCount, 1, val.ToArray());
         }
 
-        public static double dSE(Matrix<double> yhat, Matrix<double> y)
-        {
-            var val = yhat.ColumnSums().ToArray().Sum() > y.ColumnSums().ToArray().Sum() ? 1 : -1;
-            return val;
-        }
-
+        /// <summary>
+        /// devuelve la funcion de activacion dado el nombre
+        /// </summary>
+        /// <param name="name">enum con el nombre</param>
+        /// <returns></returns>
         public static Func<Matrix<double>, Matrix<double>, Matrix<double>> GetLostFunction(LOST name = LOST.MSE)
         {
             Func<Matrix<double>, Matrix<double>, Matrix<double>> function;
@@ -146,6 +175,9 @@ namespace NeuralNetwork
 
     }
 
+    /// <summary>
+    /// enum con los nombres de las funciones de perdida
+    /// </summary>
     public enum LOST
     {
         MSE,
@@ -157,6 +189,9 @@ namespace NeuralNetwork
 
     public class Losses
     {
+    /// <summary>
+    /// diccionario que empareja el nombre en formato string con su valor enum
+    /// </summary>
         public static Dictionary<string, LOST> ByName { get; set; } = new Dictionary<string, LOST>
         {
             {"MSE", LOST.MSE},

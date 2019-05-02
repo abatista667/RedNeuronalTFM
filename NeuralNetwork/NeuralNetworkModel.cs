@@ -4,6 +4,9 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace NeuralNetwork
 {
+/// <summary>
+/// modelo que sirve para gurdar y recrear la configuracion de la red
+/// </summary>
     [Serializable]
     public class NeuralNetworkModel
     {

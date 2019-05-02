@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
+/// <summary>
+/// enum con los diferentes optimmizadores de la red
+/// </summary>
     public enum OPTIMIZER
     {
         SGD,
@@ -14,6 +17,9 @@ namespace NeuralNetwork
 
     public class Optimizers
     {
+    /// <summary>
+    /// diccionario con nombre de los optimizadores emparejados con su enum
+    /// </summary>
         public static Dictionary<string, OPTIMIZER> ByName { get; set; } = new Dictionary<string, OPTIMIZER>
         {
             {"ADAM", OPTIMIZER.ADAM},

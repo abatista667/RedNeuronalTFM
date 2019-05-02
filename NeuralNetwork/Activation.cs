@@ -9,35 +9,70 @@ namespace NeuralNetwork
     //implementacion de la funcion de activacion
     public class Activation
     {
+        /// <summary>
+        /// funcion de activacion relu
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         private static double Relu(double x)
         {
             return x < 0 ? 0 : x;
         }
+        /// <summary>
+        /// derivada de la funcion de activacion relu, commo no tiene el valor siempre sera 1, asi no se altera
+        /// la multiplicacion en el calculo del gradiente
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         private static double Drelu(double x)
         {
             return 1;
         }
+        /// <summary>
+        /// sin funcion de activacion
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         private static double None(double arg)
         {
             return arg;
         }
-
+        /// <summary>
+        /// funcion de activacion step o umbral
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         private static double Step(double arg)
         {
             return arg <= 0 ? 0 : 1;
         }
 
+        /// <summary>
+        /// la funcon step tampoco tiene derivada
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         private static double Dstep(double arg)
         {
             return 1;
         }
 
+        /// <summary>
+        /// funcion de activacion sigmoide
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         private static double Sigmoid(double x)
         {
             // return 2 / (1 + Math.Exp(-2 * x)) - 1;
             return 1 / (1 + Math.Pow(Math.E, -x));
         }
 
+        /// <summary>
+        /// derivada de la funcion sigmoide
+        /// </summary>
+        /// <param name="x"> valor entre 0 y 1</param>
+        /// <returns></returns>
         private static double Dsigmoid(double x)
         {
             //var val = 1 - (Math.Pow(x, 2));
@@ -48,7 +83,11 @@ namespace NeuralNetwork
 
             return val;
         }
-
+        /// <summary>
+        /// funcion de activacion tanh
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         private static double TanH(double x)
         {
             var e = Math.E;
@@ -59,12 +98,22 @@ namespace NeuralNetwork
             return Math.Tanh(x);
         }
 
+        /// <summary>
+        /// derivada de la tanh
+        /// </summary>
+        /// <param name="dx"></param>
+        /// <returns></returns>
         private static double dTanH(double dx)
         {
 
             return 1 - Math.Pow(dx, 2);
         }
 
+        /// <summary>
+        /// funcion de activacion softmax
+        /// </summary>
+        /// <param name="output"></param>
+        /// <returns></returns>
         internal static Matrix<double> Softmax(Matrix<double> output)
         {
             var zout = output.Map(x =>
@@ -82,6 +131,11 @@ namespace NeuralNetwork
             return softmax;
         }
 
+        /// <summary>
+        /// derivada de la funcion softmax
+        /// </summary>
+        /// <param name="activated"></param>
+        /// <returns></returns>
         internal static Matrix<double> DSoftmax(Matrix<double> activated)
         {
             var builder = Matrix<double>.Build;
@@ -106,7 +160,11 @@ namespace NeuralNetwork
             return o;
         }
 
-
+        /// <summary>
+        /// retorna una funcion de activacion dado el nombre
+        /// </summary>
+        /// <param name="name">enum con el nombre de la funcion</param>
+        /// <returns>funcion de activacion</returns>
         internal static Func<double, double> GetActivationByName(ACTIVATION name = ACTIVATION.NONE)
         {
             Func<double, double> function;
@@ -130,7 +188,11 @@ namespace NeuralNetwork
 
             return function;
         }
-
+        /// <summary>
+        /// retorna la derivada de la funcion de activacion dado el nombre
+        /// </summary>
+        /// <param name="name">enum con el nombre de la funcion</param>
+        /// <returns>derivada de la funcion de activacion</returns>
         internal static Func<double, double> GetActivationDerivativeByName(ACTIVATION name = ACTIVATION.NONE)
         {
             Func<double, double> function;
@@ -158,7 +220,9 @@ namespace NeuralNetwork
             return function;
         }
 
-
+        /// <summary>
+        /// diccionario con el nombre de la funcion en string emparejado con su valor enum
+        /// </summary>
         public static Dictionary<string, ACTIVATION> ByName { get; set; } = new Dictionary<string, ACTIVATION>
         {
             {"", ACTIVATION.NONE},
@@ -170,6 +234,7 @@ namespace NeuralNetwork
         };
     }
 
+    //enum de las funciones de acivacion
     public enum ACTIVATION
     {
         SIGMOID,

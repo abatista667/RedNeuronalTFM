@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
+/// <summary>
+/// excepcion de que la tasa de aprendisaje es muy alta
+/// </summary>
     public class LearingRateTooHighException : Exception
     {
         public LearingRateTooHighException()
