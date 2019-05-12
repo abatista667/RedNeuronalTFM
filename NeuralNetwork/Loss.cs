@@ -6,7 +6,7 @@ using System.Linq;
 namespace NeuralNetwork
 {
     //implementacion de la funcion de perdida
-    public class Lost
+    public class Loss
     {
     /// <summary>
     /// variable que sirve para instaciar matrices
@@ -30,20 +30,7 @@ namespace NeuralNetwork
             return mean.PointwiseMultiply(dLoss(yhat, y));
         }
 
-        /// <summary>
-        /// funcion de perdida error cuadratico
-        /// </summary>
-        /// <param name="yhat"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        private static Matrix<double> SE(Matrix<double> yhat, Matrix<double> y)
-        {
-            var sustraction = (yhat - y);
-            var powered = sustraction.PointwisePower(2);
-            var vsummary = powered.RowSums();
-            var summary = M.Dense(vsummary.Count, 1, vsummary.ToArray());
-            return summary;
-        }
+
         /// <summary>
         /// funcion de perdida error logaritmico cuadriatico medio
         /// </summary>
@@ -146,24 +133,24 @@ namespace NeuralNetwork
         /// </summary>
         /// <param name="name">enum con el nombre</param>
         /// <returns></returns>
-        public static Func<Matrix<double>, Matrix<double>, Matrix<double>> GetLostFunction(LOST name = LOST.MSE)
+        public static Func<Matrix<double>, Matrix<double>, Matrix<double>> GetLostFunction(LOSS name = LOSS.MSE)
         {
             Func<Matrix<double>, Matrix<double>, Matrix<double>> function;
             switch (name)
             {
-                case LOST.BINARY_CROSS_ENTROPY:
+                case LOSS.BINARY_CROSS_ENTROPY:
                     function = BinaryCrossEntropy;
                     break;
-                case LOST.CATEGORICAL_CROSS_ENTROPY:
+                case LOSS.CATEGORICAL_CROSS_ENTROPY:
                     function = MultiClassCrossEntropy;
                     break;
-                case LOST.MSE:
+                case LOSS.MSE:
                     function = MSE;
                     break;
-                case LOST.MAE:
+                case LOSS.MAE:
                     function = MAE;
                     break;
-                case LOST.MSLE:
+                case LOSS.MSLE:
                     function = MSLE;
                     break;
                 default:
@@ -178,7 +165,7 @@ namespace NeuralNetwork
     /// <summary>
     /// enum con los nombres de las funciones de perdida
     /// </summary>
-    public enum LOST
+    public enum LOSS
     {
         MSE,
         MSLE,
@@ -192,13 +179,13 @@ namespace NeuralNetwork
     /// <summary>
     /// diccionario que empareja el nombre en formato string con su valor enum
     /// </summary>
-        public static Dictionary<string, LOST> ByName { get; set; } = new Dictionary<string, LOST>
+        public static Dictionary<string, LOSS> ByName { get; set; } = new Dictionary<string, LOSS>
         {
-            {"MSE", LOST.MSE},
-            {"MSLE", LOST.MSLE},
-            {"MAE", LOST.MAE},
-            {"BinaryCrossEntropy", LOST.BINARY_CROSS_ENTROPY},
-            {"CategoricalCrossEntropy", LOST.CATEGORICAL_CROSS_ENTROPY},
+            {"MSE", LOSS.MSE},
+            {"MSLE", LOSS.MSLE},
+            {"MAE", LOSS.MAE},
+            {"BinaryCrossEntropy", LOSS.BINARY_CROSS_ENTROPY},
+            {"CategoricalCrossEntropy", LOSS.CATEGORICAL_CROSS_ENTROPY},
         };
     }
 }

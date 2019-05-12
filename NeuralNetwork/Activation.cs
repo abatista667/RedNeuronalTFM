@@ -31,11 +31,11 @@ namespace NeuralNetwork
         /// <summary>
         /// sin funcion de activacion
         /// </summary>
-        /// <param name="arg"></param>
+        /// <param name="x"></param>
         /// <returns></returns>
-        private static double None(double arg)
+        private static double None(double x)
         {
-            return arg;
+            return x;
         }
         /// <summary>
         /// funcion de activacion step o umbral
@@ -64,20 +64,17 @@ namespace NeuralNetwork
         /// <returns></returns>
         private static double Sigmoid(double x)
         {
-            // return 2 / (1 + Math.Exp(-2 * x)) - 1;
             return 1 / (1 + Math.Pow(Math.E, -x));
         }
 
         /// <summary>
         /// derivada de la funcion sigmoide
         /// </summary>
-        /// <param name="x"> valor entre 0 y 1</param>
+        /// <param name="dx"> valor entre 0 y 1</param>
         /// <returns></returns>
-        private static double Dsigmoid(double x)
+        private static double Dsigmoid(double dx)
         {
-            //var val = 1 - (Math.Pow(x, 2));
-
-            var val = x * (1 - x);
+            var val = dx * (1 - dx);
 
             if (val == 0) return 1;
 

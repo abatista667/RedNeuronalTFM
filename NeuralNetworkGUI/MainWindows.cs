@@ -19,7 +19,7 @@ namespace NeuralNetworkGUI
             InitializeComponent();
         }
 
-        NeuralNetworkBase nn;
+        NeuralNetwork.NeuralNetwork nn;
         DataTable dataTable;
         NeuralNetworkModel model;
         double[][] Y, X, Xtest, Ytest;
@@ -28,7 +28,7 @@ namespace NeuralNetworkGUI
 
         ACTIVATION activationOutput;
         ACTIVATION activationHidden;
-        LOST loss;
+        LOSS loss;
         OPTIMIZER optimizer;
 
         List<string> predictFields, targetFields;
@@ -253,7 +253,7 @@ namespace NeuralNetworkGUI
 
         private void OpenFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            nn = new NeuralNetworkBase();
+            nn = new NeuralNetwork.NeuralNetwork();
             nn.Load(openFileDialog1.FileName);
             btPredict.Enabled = true;
         }
@@ -274,7 +274,7 @@ namespace NeuralNetworkGUI
 
             layers.Add(new Layer(Y.First().Length, activationOutput));
 
-            nn = new NeuralNetworkBase(layers, leraningRate, epoch, loss, false, batches,
+            nn = new NeuralNetwork.NeuralNetwork(layers, leraningRate, epoch, loss, false, batches,
                                        optimizer: optimizer);
 
             init = true;

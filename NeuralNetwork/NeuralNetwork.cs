@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    public class NeuralNetworkBase
+    public class NeuralNetwork
     {
         Matrix<double> _inputs; //vector de entrada X
 
@@ -43,8 +43,8 @@ namespace NeuralNetwork
         private static Random rng = new Random(); //permite crear numeros random diferentes entre cada llamada
 
         //inicializar los valores de la red neuronal
-        public NeuralNetworkBase(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
-        LOST lost = LOST.MSE, bool useBias = true, int batchSize = 200, OPTIMIZER optimizer = OPTIMIZER.SGD,
+        public NeuralNetwork(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
+        LOSS lost = LOSS.MSE, bool useBias = true, int batchSize = 200, OPTIMIZER optimizer = OPTIMIZER.SGD,
         double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8, bool shufle = true)
         {
             _layers = layers;
@@ -64,7 +64,7 @@ namespace NeuralNetwork
             _weigths = new List<Matrix<double>>();
             _bias = new List<Matrix<double>>();
             _layerOutput = new List<Matrix<double>>();
-            _lostFunction = Lost.GetLostFunction(lost);
+            _lostFunction = Loss.GetLostFunction(lost);
 
             //por cada capa
             for (int i = 0; i < layers.Count; i++)
@@ -104,7 +104,7 @@ namespace NeuralNetwork
         /// <summary>
         /// inicializa la red neuronal sin parametros, esto para cargar parametros desde un archivo en disco
         /// </summary>
-        public NeuralNetworkBase()
+        public NeuralNetwork()
         {
             _layerOutput = new List<Matrix<double>>();
         }
@@ -236,7 +236,7 @@ namespace NeuralNetwork
                     e = _weigths[i + 1].Transpose() * e;
 
                 if (e[0, 0].Equals(double.NaN) || double.IsInfinity(e[0, 0]))
-                    throw new LearingRateTooHighException();
+                    throw new LearningRateTooHighException();
 
                 //multiplicar la pendiente de los valores de salida de la capa por el error
                 Matrix<double> gradient = null;
@@ -260,7 +260,7 @@ namespace NeuralNetwork
                 _bias[i] += gradient;
 
                 if (_weigths[i][0, 0].Equals(double.NaN) || double.IsInfinity(_weigths[i][0, 0]))
-                    throw new LearingRateTooHighException();
+                    throw new LearningRateTooHighException();
             }
         }
 
@@ -291,7 +291,7 @@ namespace NeuralNetwork
                     e = _weigths[i + 1].Transpose() * e;
 
                 if (e[0, 0].Equals(double.NaN) || double.IsInfinity(e[0, 0]))
-                    throw new LearingRateTooHighException();
+                    throw new LearningRateTooHighException();
 
                 //multiplicar la pendiente de los valores de salida de la capa por el error
                 Matrix<double> gradient = null;
@@ -338,7 +338,7 @@ namespace NeuralNetwork
                 _bias[i] += gradient;
 
                 if (_weigths[i][0, 0].Equals(double.NaN) || double.IsInfinity(_weigths[i][0, 0]))
-                    throw new LearingRateTooHighException();
+                    throw new LearningRateTooHighException();
             }
         }
 
@@ -399,12 +399,12 @@ namespace NeuralNetwork
         /// <summary>
         /// funcion que crea la lista de indices de los batches
         /// </summary>
-        /// <param name="v">numero de batches</param>
+        /// <param name="batches">numero de batches</param>
         /// <returns></returns>
-        private List<int> GenerateBatchOrder(int v)
+        private List<int> GenerateBatchOrder(int batches)
         {
             var list = new List<int>();
-            for (int i = 0; i < v; i++)
+            for (int i = 0; i < batches; i++)
             {
                 list.Add(i);
             }

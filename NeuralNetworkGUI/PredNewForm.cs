@@ -13,10 +13,10 @@ namespace NeuralNetworkGUI
     public partial class PredNewForm : Form
     {
         DataTable table;
-        NeuralNetwork.NeuralNetworkBase nn;
+        NeuralNetwork.NeuralNetwork nn;
         List<string> predict, target;
         DataTable alldt;
-        public PredNewForm(NeuralNetwork.NeuralNetworkBase n, List<string> X, List<string> Y, DataTable dt)
+        public PredNewForm(NeuralNetwork.NeuralNetwork n, List<string> X, List<string> Y, DataTable dt)
         {
             table = new DataTable();
             X.ForEach(x => table.Columns.Add(x.Trim()));

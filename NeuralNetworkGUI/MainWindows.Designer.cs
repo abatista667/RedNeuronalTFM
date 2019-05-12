@@ -72,6 +72,7 @@ namespace NeuralNetworkGUI
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.cbOptimizer = new System.Windows.Forms.ComboBox();
 			this.label12 = new System.Windows.Forms.Label();
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
@@ -92,6 +93,7 @@ namespace NeuralNetworkGUI
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cargarDataSetToolStripMenuItem,
             this.toolStripMenuItem2,
+            this.toolStripMenuItem5,
             this.toolStripMenuItem3,
             this.toolStripMenuItem4,
             this.cerrarToolStripMenuItem});
@@ -449,6 +451,12 @@ namespace NeuralNetworkGUI
 			this.label12.TabIndex = 27;
 			this.label12.Text = "Optimizador";
 			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem5.Text = "Reiniciar Todo";
+			// 
 			// MainWindows
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -485,7 +493,7 @@ namespace NeuralNetworkGUI
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainWindows";
-			this.Text = "Multilayer Perceptrom Regressor";
+			this.Text = "Perceptron Multicapa";
 			this.Load += new System.EventHandler(this.MainWindows_Load);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
@@ -539,6 +547,7 @@ namespace NeuralNetworkGUI
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ComboBox cbOptimizer;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
     }
 }
 

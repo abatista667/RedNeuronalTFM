@@ -9,9 +9,9 @@ namespace NeuralNetwork
 /// <summary>
 /// excepcion de que la tasa de aprendisaje es muy alta
 /// </summary>
-    public class LearingRateTooHighException : Exception
+    public class LearningRateTooHighException : Exception
     {
-        public LearingRateTooHighException()
+        public LearningRateTooHighException()
         : base("Se ha producido un error debido a que la tasa de aprendisaje es muy alta") { }
     }
 }
