@@ -14,6 +14,7 @@ namespace NeuralNetworkGUI
 {
     public partial class MainWindows : Form
     {
+
         public MainWindows()
         {
             InitializeComponent();
@@ -32,7 +33,9 @@ namespace NeuralNetworkGUI
         OPTIMIZER optimizer;
 
         List<string> predictFields, targetFields;
-        BackgroundWorker worker;
+        BackgroundWorker worker, openFileWorker;
+        string _filename;
+
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -43,11 +46,13 @@ namespace NeuralNetworkGUI
         private void button3_Click(object sender, EventArgs e)
         {
             button3.Enabled = false;
+            progressBar1.Visible = true;
 
             activationOutput = Activation.ByName[cbActivation.Text];
             activationHidden = Activation.ByName[cbActivationHidden.Text];
             loss = Losses.ByName[cbLoss.Text];
             optimizer = Optimizers.ByName[cbOptimizer.Text];
+            worker.WorkerReportsProgress = true;
             worker.RunWorkerAsync();
         }
 
@@ -62,9 +67,9 @@ namespace NeuralNetworkGUI
             OFDDataSet.ShowDialog();
         }
 
-        private void OFDDataSet_FileOk(object sender, CancelEventArgs e)
+        private void OpenFileWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            var lines = File.ReadAllLines(OFDDataSet.FileName);
+            var lines = File.ReadAllLines(_filename);
             var fields = lines.First().Split(',');
 
             dataTable = new DataTable();
@@ -73,7 +78,7 @@ namespace NeuralNetworkGUI
             {
                 dataTable.Columns.Add(f);
             }
-
+            int index = 0;
             foreach (var line in lines.Skip(1))//skipt the header
             {
                 var data = line.Split(',');
@@ -85,16 +90,17 @@ namespace NeuralNetworkGUI
                 }
 
                 dataTable.Rows.Add(row);
+                ((BackgroundWorker)sender)
+                    .ReportProgress(Convert.ToInt32(Convert.ToDouble(index++) / lines.Length));
             }
+        }
 
-            dataGridView1.DataSource = dataTable;
-
-            foreach (DataGridViewColumn c in dataGridView1.Columns)
-            {
-                c.SortMode = DataGridViewColumnSortMode.NotSortable;
-                c.Selected = false;
-            }
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullColumnSelect;
+        private void OFDDataSet_FileOk(object sender, CancelEventArgs e)
+        {
+            _filename = OFDDataSet.FileName;
+            openFileWorker.WorkerReportsProgress = true;
+            openFileWorker.RunWorkerAsync();
+            progressBar1.Visible= true;
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -160,10 +166,41 @@ namespace NeuralNetworkGUI
                 MessageBox.Show("Entrenamiento completado");
                 button3.Enabled = true;
                 btPredict.Enabled = true;
+                worker.WorkerReportsProgress = false;
+
+                progressBar1.Visible = false;
             };
 
-            worker.ProgressChanged += (s, args) => { };
+            worker.ProgressChanged += (s, args) =>
+            {
+                progressBar1.Value = args.ProgressPercentage;
+            };
+
+            openFileWorker = new BackgroundWorker();
+            openFileWorker.DoWork += OpenFileWorker_DoWork;
+            openFileWorker.RunWorkerCompleted += (ob, args) =>
+            {
+                dataGridView1.DataSource = dataTable;
+
+                foreach (DataGridViewColumn c in dataGridView1.Columns)
+                {
+                    c.SortMode = DataGridViewColumnSortMode.NotSortable;
+                    c.Selected = false;
+                }
+                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullColumnSelect;
+
+                progressBar1.Value= 0;
+                progressBar1.Visible= false;
+            };
+
+            openFileWorker.ProgressChanged += (s, args) =>
+            {
+                progressBar1.Value = args.ProgressPercentage;
+            };
+
         }
+
+
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -227,7 +264,8 @@ namespace NeuralNetworkGUI
 
             //try
             //{
-            model = nn.Fit(X, Y);
+            model = nn.Fit(X, Y, ((BackgroundWorker)sender).ReportProgress);
+
 
 
             for (int i = 0; i < Ytest.Length; i++)
@@ -256,6 +294,16 @@ namespace NeuralNetworkGUI
             nn = new NeuralNetwork.NeuralNetwork();
             nn.Load(openFileDialog1.FileName);
             btPredict.Enabled = true;
+        }
+
+        private void DataGridView1_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            e.Column.FillWeight = 10;
+        }
+
+        private void ToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void InitializeNet()
@@ -288,6 +336,7 @@ namespace NeuralNetworkGUI
             {
                 init = false;
                 nn = null;
+                progressBar1.Value = 0;
             }
         }
 

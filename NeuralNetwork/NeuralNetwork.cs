@@ -83,7 +83,7 @@ namespace NeuralNetwork
                 var weights = M.Dense(l.Nodes, andL.Nodes,
                 (x, y) =>
                 {
-                    return MathNet.Numerics.Distributions.ContinuousUniform.Sample(0.00001, 1);
+                    return MathNet.Numerics.Distributions.ContinuousUniform.Sample(-1, 1);
                 });
                 _weigths.Add(weights);
 
@@ -94,7 +94,7 @@ namespace NeuralNetwork
                                 //Random random = new MathNet.Numerics.Random.SystemRandomSource();
                                 //var sample = random.NextDouble();
                                 //return sample;
-                                return MathNet.Numerics.Distributions.ContinuousUniform.Sample(0.00001, 1);
+                                return MathNet.Numerics.Distributions.ContinuousUniform.Sample(-1, 1);
                             });
                 _bias.Add(bias);
             }
@@ -342,7 +342,8 @@ namespace NeuralNetwork
             }
         }
 
-        public NeuralNetworkModel Fit(double[][] input, double[][] desiredOutPut)
+        public NeuralNetworkModel Fit(double[][] input, double[][] desiredOutPut,
+                            Action<int> reportProgress = null)
         {
             //todo: verificar que el tamaño del vector X se corresponde con el tamaño de la capa de entrada
             if (input.First().Length != _layers.First().Nodes)
@@ -358,7 +359,7 @@ namespace NeuralNetwork
             {
                 var tmpE = new List<double>();
 
-                if(_shufle)
+                if (_shufle)
                     ReorderList(batchOrder);
                 _totalLost = M.Dense(desiredOutPut[0].Length, 1);
                 //Console.WriteLine($"Epoch=[ {j + 1} / {_epoch} ]");
@@ -368,6 +369,11 @@ namespace NeuralNetwork
                     tmpE.Add(e);
                 }
                 errors.Add(Math.Abs(tmpE.Sum()));
+
+                if (reportProgress != null)
+                {
+                    reportProgress(Convert.ToInt32(Convert.ToDouble(j) /_epoch *100));
+                }
             }
 
 

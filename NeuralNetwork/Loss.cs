@@ -8,9 +8,9 @@ namespace NeuralNetwork
     //implementacion de la funcion de perdida
     public class Loss
     {
-    /// <summary>
-    /// variable que sirve para instaciar matrices
-    /// </summary>
+        /// <summary>
+        /// variable que sirve para instaciar matrices
+        /// </summary>
         readonly static MatrixBuilder<double> M = Matrix<double>.Build;
 
         /// <summary>
@@ -93,6 +93,29 @@ namespace NeuralNetwork
         /// <param name="y"></param>
         /// <param name="yhat"></param>
         /// <returns></returns>
+        //private static Matrix<double> MultiClassCrossEntropy(Matrix<double> y, Matrix<double> yhat)
+        //{
+        //    double notZero = 1e-15;
+        //    Func<double, double> cleanZero = v => v == 0 ? notZero : v;
+
+        //    Matrix<double> summary = M.Dense(y.RowCount, y.ColumnCount);
+
+        //    Func<double, double, double> map2 = (v, vy) =>
+        //    {
+        //        if (vy == 1)
+        //            return -Math.Log(v, 2);
+        //        else
+        //            return -Math.Log(1 - v, 2);
+        //    };
+
+        //    yhat.Map2(map2, y, summary);
+
+        //    var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray());
+        //    var mean = vsummary.Divide(y.ColumnCount);
+        //    var d = dLoss(y, yhat);
+        //    return mean.PointwiseMultiply(d);
+        //}
+
         private static Matrix<double> MultiClassCrossEntropy(Matrix<double> y, Matrix<double> yhat)
         {
             double notZero = 1e-15;
@@ -100,17 +123,19 @@ namespace NeuralNetwork
 
             Matrix<double> summary = M.Dense(y.RowCount, y.ColumnCount);
 
-            Func<double, double, double> map2 = (v, vy) =>
+            Func<double, double, double> map2 = (si, ti) =>
             {
-                if (vy == 1)
-                    return -Math.Log(v, 2);
-                else
-                    return -Math.Log(1 - v, 2);
+                var class_loss = ti * Math.Log(si == 0? notZero : si);
+                if (double.IsInfinity(class_loss) || double.IsNegativeInfinity(class_loss))
+                {
+                    Console.WriteLine("test");
+                }
+                return class_loss;
             };
 
             yhat.Map2(map2, y, summary);
 
-            var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray());
+            var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray()) * -1;
             var mean = vsummary.Divide(y.ColumnCount);
             var d = dLoss(y, yhat);
             return mean.PointwiseMultiply(d);
@@ -176,9 +201,9 @@ namespace NeuralNetwork
 
     public class Losses
     {
-    /// <summary>
-    /// diccionario que empareja el nombre en formato string con su valor enum
-    /// </summary>
+        /// <summary>
+        /// diccionario que empareja el nombre en formato string con su valor enum
+        /// </summary>
         public static Dictionary<string, LOSS> ByName { get; set; } = new Dictionary<string, LOSS>
         {
             {"MSE", LOSS.MSE},
