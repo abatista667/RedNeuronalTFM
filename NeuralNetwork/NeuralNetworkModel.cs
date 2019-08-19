@@ -4,9 +4,9 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace NeuralNetwork
 {
-/// <summary>
-/// modelo que sirve para gurdar y recrear la configuracion de la red
-/// </summary>
+    /// <summary>
+    /// modelo que sirve para gurdar y recrear la configuracion de la red
+    /// </summary>
     [Serializable]
     public class NeuralNetworkModel
     {
@@ -19,5 +19,11 @@ namespace NeuralNetwork
         public bool UseBias { get; set; }
 
         public List<double> Errors { get; internal set; }
+    }
+
+    public class ReportProgressModel {
+
+        public int epoch { get; set; }
+        public double loss { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -41,6 +42,15 @@ namespace NeuralNetwork
         double _beta1, _beta2, _epsilon; //valores usado por la funcion de optimizacion ADAM
 
         private static Random rng = new Random(); //permite crear numeros random diferentes entre cada llamada
+
+
+        public double LearningRate { set { _learningRate = value; } }
+        public int BatchSize { set { _batchSize = value; } }
+        public int Epoch { set { _epoch = value; } }
+
+        public OPTIMIZER Optiizer { set { _optimizer = value; } }
+
+        public LOSS SetLoss { set { _lostFunction = Loss.GetLostFunction(value); } }
 
         //inicializar los valores de la red neuronal
         public NeuralNetwork(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
@@ -104,8 +114,12 @@ namespace NeuralNetwork
         /// <summary>
         /// inicializa la red neuronal sin parametros, esto para cargar parametros desde un archivo en disco
         /// </summary>
-        public NeuralNetwork()
+        public NeuralNetwork(double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8, bool shufle = true)
         {
+            _beta1 = beta1;
+            _beta2 = beta2;
+            _epsilon = epsilon;
+            _shufle = shufle;
             _layerOutput = new List<Matrix<double>>();
         }
 
@@ -343,7 +357,7 @@ namespace NeuralNetwork
         }
 
         public NeuralNetworkModel Fit(double[][] input, double[][] desiredOutPut,
-                            Action<int> reportProgress = null)
+                            BackgroundWorker worker = null)
         {
             //todo: verificar que el tamaño del vector X se corresponde con el tamaño de la capa de entrada
             if (input.First().Length != _layers.First().Nodes)
@@ -370,10 +384,18 @@ namespace NeuralNetwork
                 }
                 errors.Add(Math.Abs(tmpE.Sum()));
 
-                if (reportProgress != null)
+                if (worker != null)
                 {
-                    reportProgress(Convert.ToInt32(Convert.ToDouble(j) /_epoch *100));
+                    worker.ReportProgress(Convert.ToInt32(Convert.ToDouble(j) /_epoch *100),
+                        new ReportProgressModel {
+                            epoch = j,
+                            loss = tmpE.Sum()
+                        }
+                        );
                 }
+
+                if(worker.CancellationPending)
+                   break;
             }
 
 
