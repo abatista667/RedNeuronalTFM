@@ -19,6 +19,12 @@ namespace NeuralNetwork
         public bool UseBias { get; set; }
 
         public List<double> Errors { get; internal set; }
+
+        public string Features { get; set; }
+
+        public string Labels { get; set; }
+
+        public string HidenNodes { get; set; }
     }
 
     public class ReportProgressModel {

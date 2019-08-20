@@ -47,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnomalyDetectorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AnomalyDetectorForm.Designer.cs">
+      <DependentUpon>AnomalyDetectorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PredCharForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +85,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AnomalyDetectorForm.resx">
+      <DependentUpon>AnomalyDetectorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PredCharForm.resx">
       <DependentUpon>PredCharForm.cs</DependentUpon>
     </EmbeddedResource>

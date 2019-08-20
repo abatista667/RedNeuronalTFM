@@ -273,7 +273,10 @@ namespace NeuralNetworkGUI
             nn.Epoch = int.Parse(tbEpoch.Text);
             nn.BatchSize = int.Parse(tbBatches.Text);
             nn.SetLoss = loss;
-            nn.Optiizer = optimizer;
+            nn.Optimizer = optimizer;
+            nn.Features = tbPredictoras.Text;
+            nn.Labels = tbObjetivos.Text;
+            nn.HiddenNodes = tbHidden.Text;
             //try
             //{
             model = nn.Fit(X, Y, ((BackgroundWorker)sender));
@@ -305,6 +308,14 @@ namespace NeuralNetworkGUI
         {
             nn = new NeuralNetwork.NeuralNetwork();
             nn.Load(openFileDialog1.FileName);
+
+            if (!string.IsNullOrWhiteSpace(nn.Features))
+            {
+                tbPredictoras.Text = nn.Features;
+                tbObjetivos.Text = nn.Labels;
+                tbHidden.Text = nn.HiddenNodes;
+            }
+
             predictFields = tbPredictoras.Text.Split(',').ToList();
             targetFields = tbObjetivos.Text.Split(',').ToList();
 
@@ -322,6 +333,11 @@ namespace NeuralNetworkGUI
         {
             //pause event
             worker.CancelAsync();
+        }
+
+        private void Button5_Click(object sender, EventArgs e)
+        {
+            tbReport.Clear();
         }
 
         private void ToolStripMenuItem5_Click(object sender, EventArgs e)

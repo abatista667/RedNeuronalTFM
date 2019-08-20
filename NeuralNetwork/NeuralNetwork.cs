@@ -42,15 +42,21 @@ namespace NeuralNetwork
         double _beta1, _beta2, _epsilon; //valores usado por la funcion de optimizacion ADAM
 
         private static Random rng = new Random(); //permite crear numeros random diferentes entre cada llamada
-
+        private string _features;
+        private string _hiddenNodes;
+        private string _labels;
 
         public double LearningRate { set { _learningRate = value; } }
         public int BatchSize { set { _batchSize = value; } }
         public int Epoch { set { _epoch = value; } }
 
-        public OPTIMIZER Optiizer { set { _optimizer = value; } }
+        public OPTIMIZER Optimizer { set { _optimizer = value; } }
 
         public LOSS SetLoss { set { _lostFunction = Loss.GetLostFunction(value); } }
+
+        public string Features { get => _features; set => _features = value; }
+        public string HiddenNodes { get => _hiddenNodes; set => _hiddenNodes = value; }
+        public string Labels { get => _labels; set => _labels = value; }
 
         //inicializar los valores de la red neuronal
         public NeuralNetwork(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
@@ -463,7 +469,10 @@ namespace NeuralNetwork
                 Weigths = _weigths,
                 Layers = _layers,
                 Bias = _bias,
-                UseBias = _useBias
+                UseBias = _useBias,
+                Features = Features,
+                Labels = Labels,
+                HidenNodes = HiddenNodes
             };
 
             // Persist to file
@@ -494,6 +503,9 @@ namespace NeuralNetwork
             _weigths = model.Weigths;
             _bias = model.Bias;
             _layers = model.Layers;
+            Features = model.Features;
+            HiddenNodes = model.HidenNodes;
+            Labels = model.Labels;
         }
         /// <summary>
         /// separa el array de X en multiples batches segun la variable _batchSize

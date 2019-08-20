@@ -75,6 +75,7 @@ namespace NeuralNetworkGUI
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tbReport = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -106,42 +107,42 @@ namespace NeuralNetworkGUI
             // cargarDataSetToolStripMenuItem
             // 
             this.cargarDataSetToolStripMenuItem.Name = "cargarDataSetToolStripMenuItem";
-            this.cargarDataSetToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.cargarDataSetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cargarDataSetToolStripMenuItem.Text = "Cargar DataSet";
             this.cargarDataSetToolStripMenuItem.Click += new System.EventHandler(this.cargarDataSetToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem2.Text = "Reiniciar Modelo";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(163, 22);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem5.Text = "Reiniciar Todo";
             this.toolStripMenuItem5.Click += new System.EventHandler(this.ToolStripMenuItem5_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(163, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem3.Text = "Guardar modelo";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(163, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem4.Text = "Cargar Modelo";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.ToolStripMenuItem4_Click);
             // 
             // cerrarToolStripMenuItem
             // 
             this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cerrarToolStripMenuItem.Text = "Cerrar";
             this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
             // 
@@ -465,7 +466,7 @@ namespace NeuralNetworkGUI
             this.tbReport.Location = new System.Drawing.Point(387, 448);
             this.tbReport.Multiline = true;
             this.tbReport.Name = "tbReport";
-            this.tbReport.Size = new System.Drawing.Size(266, 139);
+            this.tbReport.Size = new System.Drawing.Size(266, 110);
             this.tbReport.TabIndex = 30;
             // 
             // button4
@@ -479,11 +480,22 @@ namespace NeuralNetworkGUI
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(578, 564);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 32;
+            this.button5.Text = "Clear";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
+            // 
             // MainWindows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(728, 604);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.tbReport);
             this.Controls.Add(this.progressBar1);
@@ -574,6 +586,7 @@ namespace NeuralNetworkGUI
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.TextBox tbReport;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
     }
 }
 

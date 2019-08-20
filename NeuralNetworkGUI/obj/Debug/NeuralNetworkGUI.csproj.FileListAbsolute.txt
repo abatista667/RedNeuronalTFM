@@ -58,3 +58,4 @@ C:\Users\Ariel\Source\Repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\obj\Debu
 C:\Users\Ariel\Source\Repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.csproj.CopyComplete
 C:\Users\Ariel\Source\Repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.exe
 C:\Users\Ariel\Source\Repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.pdb
+C:\Users\Ariel Batista\source\repos\RedNeuronalTFM\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.AnomalyDetectorForm.resources
