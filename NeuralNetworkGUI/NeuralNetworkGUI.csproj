@@ -53,6 +53,12 @@
     <Compile Include="AnomalyDetectorForm.Designer.cs">
       <DependentUpon>AnomalyDetectorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClassSplitter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClassSplitter.Designer.cs">
+      <DependentUpon>ClassSplitter.cs</DependentUpon>
+    </Compile>
     <Compile Include="PredCharForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +93,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AnomalyDetectorForm.resx">
       <DependentUpon>AnomalyDetectorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ClassSplitter.resx">
+      <DependentUpon>ClassSplitter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PredCharForm.resx">
       <DependentUpon>PredCharForm.cs</DependentUpon>

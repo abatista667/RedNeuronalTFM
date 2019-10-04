@@ -340,6 +340,16 @@ namespace NeuralNetworkGUI
             tbReport.Clear();
         }
 
+        private void DetectorDeAnomaliasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new AnomalyDetectorForm().ShowDialog();
+        }
+
+        private void SepararDatasetEnClasesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void ToolStripMenuItem5_Click(object sender, EventArgs e)
         {
 

@@ -76,6 +76,9 @@ namespace NeuralNetworkGUI
             this.tbReport = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.prediccionAnomaliasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.separarDatasetEnClasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.detectorDeAnomaliasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -84,7 +87,8 @@ namespace NeuralNetworkGUI
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
-            this.estadisticasToolStripMenuItem});
+            this.estadisticasToolStripMenuItem,
+            this.prediccionAnomaliasToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(728, 24);
@@ -107,42 +111,42 @@ namespace NeuralNetworkGUI
             // cargarDataSetToolStripMenuItem
             // 
             this.cargarDataSetToolStripMenuItem.Name = "cargarDataSetToolStripMenuItem";
-            this.cargarDataSetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cargarDataSetToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.cargarDataSetToolStripMenuItem.Text = "Cargar DataSet";
             this.cargarDataSetToolStripMenuItem.Click += new System.EventHandler(this.cargarDataSetToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 22);
             this.toolStripMenuItem2.Text = "Reiniciar Modelo";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.ToolStripMenuItem2_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(163, 22);
             this.toolStripMenuItem5.Text = "Reiniciar Todo";
             this.toolStripMenuItem5.Click += new System.EventHandler(this.ToolStripMenuItem5_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(163, 22);
             this.toolStripMenuItem3.Text = "Guardar modelo";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(163, 22);
             this.toolStripMenuItem4.Text = "Cargar Modelo";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.ToolStripMenuItem4_Click);
             // 
             // cerrarToolStripMenuItem
             // 
             this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.cerrarToolStripMenuItem.Text = "Cerrar";
             this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
             // 
@@ -490,6 +494,29 @@ namespace NeuralNetworkGUI
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
+            // prediccionAnomaliasToolStripMenuItem
+            // 
+            this.prediccionAnomaliasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.separarDatasetEnClasesToolStripMenuItem,
+            this.detectorDeAnomaliasToolStripMenuItem});
+            this.prediccionAnomaliasToolStripMenuItem.Name = "prediccionAnomaliasToolStripMenuItem";
+            this.prediccionAnomaliasToolStripMenuItem.Size = new System.Drawing.Size(134, 20);
+            this.prediccionAnomaliasToolStripMenuItem.Text = "Prediccion Anomalias";
+            // 
+            // separarDatasetEnClasesToolStripMenuItem
+            // 
+            this.separarDatasetEnClasesToolStripMenuItem.Name = "separarDatasetEnClasesToolStripMenuItem";
+            this.separarDatasetEnClasesToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.separarDatasetEnClasesToolStripMenuItem.Text = "Separar Dataset en Clases";
+            this.separarDatasetEnClasesToolStripMenuItem.Click += new System.EventHandler(this.SepararDatasetEnClasesToolStripMenuItem_Click);
+            // 
+            // detectorDeAnomaliasToolStripMenuItem
+            // 
+            this.detectorDeAnomaliasToolStripMenuItem.Name = "detectorDeAnomaliasToolStripMenuItem";
+            this.detectorDeAnomaliasToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.detectorDeAnomaliasToolStripMenuItem.Text = "Detector de Anomalias";
+            this.detectorDeAnomaliasToolStripMenuItem.Click += new System.EventHandler(this.DetectorDeAnomaliasToolStripMenuItem_Click);
+            // 
             // MainWindows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -587,6 +614,9 @@ namespace NeuralNetworkGUI
         private System.Windows.Forms.TextBox tbReport;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.ToolStripMenuItem prediccionAnomaliasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem separarDatasetEnClasesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem detectorDeAnomaliasToolStripMenuItem;
     }
 }
 
