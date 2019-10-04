@@ -176,8 +176,10 @@ namespace NeuralNetworkGUI
             {
                 progressBar1.Value = args.ProgressPercentage;
                 var state = (NeuralNetwork.ReportProgressModel)args.UserState;
-                tbReport.Text += System.Environment.NewLine +
-                                $"Perdida: {state.loss} epoch; {state.epoch}";
+                string reported = tbReport.Text;
+                tbReport.Text = $"Perdida: {state.loss} epoch; {state.epoch}"
+                                + Environment.NewLine
+                                + reported;
 
             };
 
@@ -347,7 +349,12 @@ namespace NeuralNetworkGUI
 
         private void SepararDatasetEnClasesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            new ClassSplitter().ShowDialog();
+        }
 
+        private void SepararDatasetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new DatasetSplitter().ShowDialog();
         }
 
         private void ToolStripMenuItem5_Click(object sender, EventArgs e)

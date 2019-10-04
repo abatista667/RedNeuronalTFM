@@ -59,6 +59,12 @@
     <Compile Include="ClassSplitter.Designer.cs">
       <DependentUpon>ClassSplitter.cs</DependentUpon>
     </Compile>
+    <Compile Include="DatasetSplitter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DatasetSplitter.Designer.cs">
+      <DependentUpon>DatasetSplitter.cs</DependentUpon>
+    </Compile>
     <Compile Include="PredCharForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +102,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ClassSplitter.resx">
       <DependentUpon>ClassSplitter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DatasetSplitter.resx">
+      <DependentUpon>DatasetSplitter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PredCharForm.resx">
       <DependentUpon>PredCharForm.cs</DependentUpon>

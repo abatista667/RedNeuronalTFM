@@ -34,6 +34,8 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button2 = new System.Windows.Forms.Button();
             this.split = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,6 +52,7 @@
             // 
             this.tbPath.Location = new System.Drawing.Point(53, 19);
             this.tbPath.Name = "tbPath";
+            this.tbPath.ReadOnly = true;
             this.tbPath.Size = new System.Drawing.Size(226, 20);
             this.tbPath.TabIndex = 1;
             // 
@@ -61,6 +64,7 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "Cargar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // dataGridView1
             // 
@@ -83,6 +87,7 @@
             this.button2.TabIndex = 4;
             this.button2.Text = "Separar";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // split
             // 
@@ -90,6 +95,10 @@
             this.split.HeaderText = "Separar";
             this.split.Name = "split";
             this.split.ReadOnly = true;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // ClassSplitter
             // 
@@ -117,5 +126,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.DataGridViewTextBoxColumn split;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

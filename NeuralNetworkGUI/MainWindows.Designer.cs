@@ -79,6 +79,8 @@ namespace NeuralNetworkGUI
             this.prediccionAnomaliasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.separarDatasetEnClasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.detectorDeAnomaliasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.herramientasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.separarDatasetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -88,7 +90,8 @@ namespace NeuralNetworkGUI
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
             this.estadisticasToolStripMenuItem,
-            this.prediccionAnomaliasToolStripMenuItem});
+            this.prediccionAnomaliasToolStripMenuItem,
+            this.herramientasToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(728, 24);
@@ -517,6 +520,21 @@ namespace NeuralNetworkGUI
             this.detectorDeAnomaliasToolStripMenuItem.Text = "Detector de Anomalias";
             this.detectorDeAnomaliasToolStripMenuItem.Click += new System.EventHandler(this.DetectorDeAnomaliasToolStripMenuItem_Click);
             // 
+            // herramientasToolStripMenuItem
+            // 
+            this.herramientasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.separarDatasetToolStripMenuItem});
+            this.herramientasToolStripMenuItem.Name = "herramientasToolStripMenuItem";
+            this.herramientasToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
+            this.herramientasToolStripMenuItem.Text = "Herramientas";
+            // 
+            // separarDatasetToolStripMenuItem
+            // 
+            this.separarDatasetToolStripMenuItem.Name = "separarDatasetToolStripMenuItem";
+            this.separarDatasetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.separarDatasetToolStripMenuItem.Text = "Separar Dataset %";
+            this.separarDatasetToolStripMenuItem.Click += new System.EventHandler(this.SepararDatasetToolStripMenuItem_Click);
+            // 
             // MainWindows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -617,6 +635,8 @@ namespace NeuralNetworkGUI
         private System.Windows.Forms.ToolStripMenuItem prediccionAnomaliasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem separarDatasetEnClasesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem detectorDeAnomaliasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem herramientasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem separarDatasetToolStripMenuItem;
     }
 }
 
