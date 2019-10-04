@@ -42,11 +42,13 @@ namespace NeuralNetworkGUI
         {
             List<int> randoms = GenerateRandom(data.Length - 1);
             int counter = 1;
-            List<string[]> train = new List<string[]>(), test = new List<string[]>();
+            var train = new List<string[]>() { header };
+            var test = new List<string[]>() { header };
+
 
             foreach (var i in randoms)
             {
-                if (counter < testCount)
+                if (counter > testCount)
                 {
                     train.Add(data[i]);
                 }
@@ -56,13 +58,24 @@ namespace NeuralNetworkGUI
                 }
                 counter++;
             }
-            MessageBox.Show(train.Count() +" " + test.Count());
+            Save(selectedPath + "\\_train.csv", train.ToArray());
+            Save(selectedPath + "\\_test.csv", test.ToArray());
+        }
+
+        void Save(string path, string[][] data)
+        {
+            var lines = new List<string>();
+            foreach (var item in data)
+            {
+                lines.Add(string.Join(",", item));
+            }
+            File.WriteAllLines(path, lines);
         }
 
         private List<int> GenerateRandom(int v)
         {
             var list = new List<int>();
-            for (int i = 0; i < v; i++)
+            for (int i = 0; i <= v; i++)
             {
                 list.Add(i);
             }
