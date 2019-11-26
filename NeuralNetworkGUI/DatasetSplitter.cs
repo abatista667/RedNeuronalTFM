@@ -60,6 +60,7 @@ namespace NeuralNetworkGUI
             }
             Save(selectedPath + "\\_train.csv", train.ToArray());
             Save(selectedPath + "\\_test.csv", test.ToArray());
+            MessageBox.Show("datasets separado correctamente");
         }
 
         void Save(string path, string[][] data)

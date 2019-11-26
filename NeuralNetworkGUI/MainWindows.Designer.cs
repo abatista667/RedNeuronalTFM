@@ -42,6 +42,11 @@ namespace NeuralNetworkGUI
             this.perdidaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.yVsYpredToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.yVsYpredDetalleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.prediccionAnomaliasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.separarDatasetEnClasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.detectorDeAnomaliasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.herramientasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.separarDatasetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.OFDDataSet = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
@@ -76,11 +81,9 @@ namespace NeuralNetworkGUI
             this.tbReport = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.prediccionAnomaliasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.separarDatasetEnClasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.detectorDeAnomaliasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.herramientasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.separarDatasetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imagenesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.entrenarModeloToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.predecirClasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -91,7 +94,8 @@ namespace NeuralNetworkGUI
             this.toolStripMenuItem1,
             this.estadisticasToolStripMenuItem,
             this.prediccionAnomaliasToolStripMenuItem,
-            this.herramientasToolStripMenuItem});
+            this.herramientasToolStripMenuItem,
+            this.imagenesToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(728, 24);
@@ -183,6 +187,44 @@ namespace NeuralNetworkGUI
             this.yVsYpredDetalleToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.yVsYpredDetalleToolStripMenuItem.Text = "Y vs Ypred detalle";
             this.yVsYpredDetalleToolStripMenuItem.Click += new System.EventHandler(this.YVsYpredDetalleToolStripMenuItem_Click);
+            // 
+            // prediccionAnomaliasToolStripMenuItem
+            // 
+            this.prediccionAnomaliasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.separarDatasetEnClasesToolStripMenuItem,
+            this.detectorDeAnomaliasToolStripMenuItem});
+            this.prediccionAnomaliasToolStripMenuItem.Name = "prediccionAnomaliasToolStripMenuItem";
+            this.prediccionAnomaliasToolStripMenuItem.Size = new System.Drawing.Size(134, 20);
+            this.prediccionAnomaliasToolStripMenuItem.Text = "Prediccion Anomalias";
+            // 
+            // separarDatasetEnClasesToolStripMenuItem
+            // 
+            this.separarDatasetEnClasesToolStripMenuItem.Name = "separarDatasetEnClasesToolStripMenuItem";
+            this.separarDatasetEnClasesToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.separarDatasetEnClasesToolStripMenuItem.Text = "Separar Dataset en Clases";
+            this.separarDatasetEnClasesToolStripMenuItem.Click += new System.EventHandler(this.SepararDatasetEnClasesToolStripMenuItem_Click);
+            // 
+            // detectorDeAnomaliasToolStripMenuItem
+            // 
+            this.detectorDeAnomaliasToolStripMenuItem.Name = "detectorDeAnomaliasToolStripMenuItem";
+            this.detectorDeAnomaliasToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.detectorDeAnomaliasToolStripMenuItem.Text = "Detector de Anomalias";
+            this.detectorDeAnomaliasToolStripMenuItem.Click += new System.EventHandler(this.DetectorDeAnomaliasToolStripMenuItem_Click);
+            // 
+            // herramientasToolStripMenuItem
+            // 
+            this.herramientasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.separarDatasetToolStripMenuItem});
+            this.herramientasToolStripMenuItem.Name = "herramientasToolStripMenuItem";
+            this.herramientasToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
+            this.herramientasToolStripMenuItem.Text = "Herramientas";
+            // 
+            // separarDatasetToolStripMenuItem
+            // 
+            this.separarDatasetToolStripMenuItem.Name = "separarDatasetToolStripMenuItem";
+            this.separarDatasetToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.separarDatasetToolStripMenuItem.Text = "Separar Dataset %";
+            this.separarDatasetToolStripMenuItem.Click += new System.EventHandler(this.SepararDatasetToolStripMenuItem_Click);
             // 
             // dataGridView1
             // 
@@ -497,43 +539,27 @@ namespace NeuralNetworkGUI
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
-            // prediccionAnomaliasToolStripMenuItem
+            // imagenesToolStripMenuItem
             // 
-            this.prediccionAnomaliasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.separarDatasetEnClasesToolStripMenuItem,
-            this.detectorDeAnomaliasToolStripMenuItem});
-            this.prediccionAnomaliasToolStripMenuItem.Name = "prediccionAnomaliasToolStripMenuItem";
-            this.prediccionAnomaliasToolStripMenuItem.Size = new System.Drawing.Size(134, 20);
-            this.prediccionAnomaliasToolStripMenuItem.Text = "Prediccion Anomalias";
+            this.imagenesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.entrenarModeloToolStripMenuItem,
+            this.predecirClasesToolStripMenuItem});
+            this.imagenesToolStripMenuItem.Name = "imagenesToolStripMenuItem";
+            this.imagenesToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
+            this.imagenesToolStripMenuItem.Text = "Imagenes";
             // 
-            // separarDatasetEnClasesToolStripMenuItem
+            // entrenarModeloToolStripMenuItem
             // 
-            this.separarDatasetEnClasesToolStripMenuItem.Name = "separarDatasetEnClasesToolStripMenuItem";
-            this.separarDatasetEnClasesToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.separarDatasetEnClasesToolStripMenuItem.Text = "Separar Dataset en Clases";
-            this.separarDatasetEnClasesToolStripMenuItem.Click += new System.EventHandler(this.SepararDatasetEnClasesToolStripMenuItem_Click);
+            this.entrenarModeloToolStripMenuItem.Name = "entrenarModeloToolStripMenuItem";
+            this.entrenarModeloToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.entrenarModeloToolStripMenuItem.Text = "Entrenar Modelo";
+            this.entrenarModeloToolStripMenuItem.Click += new System.EventHandler(this.entrenarModeloToolStripMenuItem_Click);
             // 
-            // detectorDeAnomaliasToolStripMenuItem
+            // predecirClasesToolStripMenuItem
             // 
-            this.detectorDeAnomaliasToolStripMenuItem.Name = "detectorDeAnomaliasToolStripMenuItem";
-            this.detectorDeAnomaliasToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.detectorDeAnomaliasToolStripMenuItem.Text = "Detector de Anomalias";
-            this.detectorDeAnomaliasToolStripMenuItem.Click += new System.EventHandler(this.DetectorDeAnomaliasToolStripMenuItem_Click);
-            // 
-            // herramientasToolStripMenuItem
-            // 
-            this.herramientasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.separarDatasetToolStripMenuItem});
-            this.herramientasToolStripMenuItem.Name = "herramientasToolStripMenuItem";
-            this.herramientasToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
-            this.herramientasToolStripMenuItem.Text = "Herramientas";
-            // 
-            // separarDatasetToolStripMenuItem
-            // 
-            this.separarDatasetToolStripMenuItem.Name = "separarDatasetToolStripMenuItem";
-            this.separarDatasetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.separarDatasetToolStripMenuItem.Text = "Separar Dataset %";
-            this.separarDatasetToolStripMenuItem.Click += new System.EventHandler(this.SepararDatasetToolStripMenuItem_Click);
+            this.predecirClasesToolStripMenuItem.Name = "predecirClasesToolStripMenuItem";
+            this.predecirClasesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.predecirClasesToolStripMenuItem.Text = "Predecir Clases";
             // 
             // MainWindows
             // 
@@ -637,6 +663,9 @@ namespace NeuralNetworkGUI
         private System.Windows.Forms.ToolStripMenuItem detectorDeAnomaliasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem herramientasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem separarDatasetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem imagenesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem entrenarModeloToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem predecirClasesToolStripMenuItem;
     }
 }
 

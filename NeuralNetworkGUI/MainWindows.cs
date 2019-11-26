@@ -357,6 +357,11 @@ namespace NeuralNetworkGUI
             new DatasetSplitter().ShowDialog();
         }
 
+        private void entrenarModeloToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ImageClassifier().ShowDialog();
+        }
+
         private void ToolStripMenuItem5_Click(object sender, EventArgs e)
         {
 

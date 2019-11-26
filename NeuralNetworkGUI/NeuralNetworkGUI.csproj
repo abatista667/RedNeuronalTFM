@@ -65,6 +65,12 @@
     <Compile Include="DatasetSplitter.Designer.cs">
       <DependentUpon>DatasetSplitter.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageClassifier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImageClassifier.Designer.cs">
+      <DependentUpon>ImageClassifier.cs</DependentUpon>
+    </Compile>
     <Compile Include="PredCharForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,6 +111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DatasetSplitter.resx">
       <DependentUpon>DatasetSplitter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImageClassifier.resx">
+      <DependentUpon>ImageClassifier.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PredCharForm.resx">
       <DependentUpon>PredCharForm.cs</DependentUpon>
