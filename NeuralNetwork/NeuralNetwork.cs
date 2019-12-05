@@ -58,10 +58,12 @@ namespace NeuralNetwork
         public string HiddenNodes { get => _hiddenNodes; set => _hiddenNodes = value; }
         public string Labels { get => _labels; set => _labels = value; }
 
+        public string CheckPointPath { get; set; }
+
         //inicializar los valores de la red neuronal
         public NeuralNetwork(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
         LOSS lost = LOSS.MSE, bool useBias = true, int batchSize = 200, OPTIMIZER optimizer = OPTIMIZER.SGD,
-        double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8, bool shufle = true)
+        double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8, bool shufle = true, string checkPointPath = null)
         {
             _layers = layers;
             _batchSize = batchSize;
@@ -81,6 +83,7 @@ namespace NeuralNetwork
             _bias = new List<Matrix<double>>();
             _layerOutput = new List<Matrix<double>>();
             _lostFunction = Loss.GetLostFunction(lost);
+            CheckPointPath = checkPointPath;
 
             //por cada capa
             for (int i = 0; i < layers.Count; i++)
@@ -137,49 +140,76 @@ namespace NeuralNetwork
         /// <param name="inputArray">lista de valores Xn</param>
         /// <param name="desiredOutPut">lista de valores Yn</param>
         /// <param name="epoch">epoch</param>
+        //private double Train(double[][] inputArray, double[][] desiredOutPut, int epoch)
+        //{
+        //    //se deben convertir los array  en matrices
+        //    Matrix<double> outputMatrix = null, desiredMatrix = null;
+
+        //    //por cada elemneto de la primera dimension del array de entrada
+        //    for (int i = 0; i < inputArray.Length; i++)
+        //    {
+        //        //se inicializa la matriz input con los valores de la segunda dimension del array de entrada
+        //        //aunque es una matriz tiene n cantidad de filas pero 1 sola columna siempre.
+        //        _inputs = M.Dense(inputArray[i].Length, 1, inputArray[i]);
+
+        //        var input = M.DenseOfMatrix(_inputs);
+        //        var desired = M.Dense(desiredOutPut[i].Length, 1, desiredOutPut[i]);
+
+        //        //por cada capa de la red aplicar la suma ponderada y aplica la funcion de activacion
+        //        // activacion(W * X + B)
+        //        var output = FeedFordward(input);
+
+        //        //cuando sea el primer elemento del batch
+        //        if (outputMatrix == null)
+        //        {
+        //            //inicializar las matrices con este primer elemento
+        //            outputMatrix = M.DenseOfMatrix(output);
+        //            desiredMatrix = M.DenseOfMatrix(desired);
+        //        }
+        //        else
+        //        {
+        //            //de lo contrario agregar como una columna
+        //            //asi pues se formara una matriz donde cada columna corresponda a
+        //            //un par de valores X,Y
+        //            var tmpMatrix = M.Dense(output.RowCount, outputMatrix.ColumnCount + 1);
+        //            outputMatrix.Append(output, tmpMatrix);
+        //            outputMatrix = M.DenseOfMatrix(tmpMatrix);
+
+        //            desiredMatrix.Append(desired, tmpMatrix);
+        //            desiredMatrix = M.DenseOfMatrix(tmpMatrix);
+        //        }
+
+        //    }
+
+        //    //calcular la perdida del batch
+        //    var batchLoss = _lostFunction(desiredMatrix, outputMatrix);
+
+        //    _totalLost += batchLoss;
+
+        //    //optimizar la funcion de perdida
+        //    if (_optimizer == OPTIMIZER.SGD)
+        //        StocasticGradientDecent(batchLoss);
+        //    else
+        //        Adam(batchLoss, epoch);
+
+        //    //retorna la perdida total del batch
+        //    return batchLoss.RowSums().ToArray().Sum();
+        //}
+
         private double Train(double[][] inputArray, double[][] desiredOutPut, int epoch)
         {
-            //se deben convertir los array  en matrices
-            Matrix<double> outputMatrix = null, desiredMatrix = null;
+            //se inicializa la matriz input con los valores de la segunda dimension del array de entrada
+            //aunque es una matriz tiene n cantidad de filas pero 1 sola columna siempre.
+            _inputs = M.DenseOfRowArrays(inputArray).Transpose();
+            var desired = M.DenseOfRowArrays(desiredOutPut).Transpose();
 
-            //por cada elemneto de la primera dimension del array de entrada
-            for (int i = 0; i < inputArray.Length; i++)
-            {
-                //se inicializa la matriz input con los valores de la segunda dimension del array de entrada
-                //aunque es una matriz tiene n cantidad de filas pero 1 sola columna siempre.
-                _inputs = M.Dense(inputArray[i].Length, 1, inputArray[i]);
+            //por cada capa de la red aplicar la suma ponderada y aplica la funcion de activacion
+            // activacion(W * X + B)
+            var output = FeedFordward(_inputs);
 
-                var input = M.DenseOfMatrix(_inputs);
-                var desired = M.Dense(desiredOutPut[i].Length, 1, desiredOutPut[i]);
-
-                //por cada capa de la red aplicar la suma ponderada y aplica la funcion de activacion
-                // activacion(W * X + B)
-                var output = FeedFordward(input);
-
-                //cuando sea el primer elemento del batch
-                if (outputMatrix == null)
-                {
-                    //inicializar las matrices con este primer elemento
-                    outputMatrix = M.DenseOfMatrix(output);
-                    desiredMatrix = M.DenseOfMatrix(desired);
-                }
-                else
-                {
-                    //de lo contrario agregar como una columna
-                    //asi pues se formara una matriz donde cada columna corresponda a
-                    //un par de valores X,Y
-                    var tmpMatrix = M.Dense(output.RowCount, outputMatrix.ColumnCount + 1);
-                    outputMatrix.Append(output, tmpMatrix);
-                    outputMatrix = M.DenseOfMatrix(tmpMatrix);
-
-                    desiredMatrix.Append(desired, tmpMatrix);
-                    desiredMatrix = M.DenseOfMatrix(tmpMatrix);
-                }
-
-            }
 
             //calcular la perdida del batch
-            var batchLoss = _lostFunction(desiredMatrix, outputMatrix);
+            var batchLoss = _lostFunction(desired, output);
 
             _totalLost += batchLoss;
 
@@ -192,6 +222,7 @@ namespace NeuralNetwork
             //retorna la perdida total del batch
             return batchLoss.RowSums().ToArray().Sum();
         }
+
 
         /// <summary>
         /// aplica la formula activacion(W * X + B) en todas las capas
@@ -316,13 +347,13 @@ namespace NeuralNetwork
                 //multiplicar la pendiente de los valores de salida de la capa por el error
                 Matrix<double> gradient = null;
 
-                gradient = outputDerivated.PointwiseMultiply(e);
+                gradient = outputDerivated.RowSums().ToColumnMatrix().PointwiseMultiply(e);
 
-                var inputT = _inputs.Transpose();
+                var inputT = _inputs.RowSums().ToColumnMatrix().Transpose();
 
                 if (i > 0)//no es el ultimo elemento
                 {
-                    inputT = _layerOutput[i - 1].Transpose();
+                    inputT = _layerOutput[i - 1].RowSums().ToColumnMatrix().Transpose();
 
                 }
 
@@ -369,18 +400,21 @@ namespace NeuralNetwork
             if (input.First().Length != _layers.First().Nodes)
                 throw new Exception($"El vector de entrada no concuerda con el " +
                 $"numero de nodos de la primera capa, se esperan: {_layers.First().Nodes} nodos");
-
-            var inputBatches = SplitInBatches(input);
-            var Labels = SplitInBatches(desiredOutPut);
             var errors = new List<double>();
-            var batchOrder = GenerateBatchOrder(inputBatches.Length);
+
+
 
             for (int j = 0; j < _epoch; j++)
             {
-                var tmpE = new List<double>();
-
                 if (_shufle)
-                    ReorderList(batchOrder);
+                    ReorderList(input, desiredOutPut);
+
+                var tmpE = new List<double>();
+                var inputBatches = SplitInBatches(input);
+                var Labels = SplitInBatches(desiredOutPut);
+                var batchOrder = GenerateBatchOrder(inputBatches.Length);
+
+
                 _totalLost = M.Dense(desiredOutPut[0].Length, 1);
                 //Console.WriteLine($"Epoch=[ {j + 1} / {_epoch} ]");
                 foreach (var i in batchOrder)
@@ -388,20 +422,27 @@ namespace NeuralNetwork
                     var e = Train(inputBatches[i], Labels[i], j);
                     tmpE.Add(e);
                 }
-                errors.Add(Math.Abs(tmpE.Sum()));
+                errors.Add(tmpE.Sum(x => Math.Abs(x)));
 
                 if (worker != null)
                 {
-                    worker.ReportProgress(Convert.ToInt32(Convert.ToDouble(j) /_epoch *100),
-                        new ReportProgressModel {
+                    worker.ReportProgress(Convert.ToInt32(Convert.ToDouble(j) / _epoch * 100),
+                        new ReportProgressModel
+                        {
                             epoch = j,
-                            loss = tmpE.Sum()
+                            loss = tmpE.Sum(x => Math.Abs(x))
                         }
                         );
                 }
+                var date = DateTime.Now;
+                var seq = date.Year.ToString() + date.Month.ToString() + date.Day.ToString() + date.Millisecond;
+                string checkPointName = $"chp_{seq}_batchsize_{_batchSize}_epoch_{j}_loss_{tmpE.Sum(x => Math.Abs(x))}.ck";
 
-                if(worker.CancellationPending)
-                   break;
+                if (!string.IsNullOrWhiteSpace(CheckPointPath))
+                    this.Save(CheckPointPath + "\\" + checkPointName);
+
+                if (worker.CancellationPending)
+                    break;
             }
 
 
@@ -417,16 +458,21 @@ namespace NeuralNetwork
 
         //funcion que reordena el orden del numero de batch
         //para esto se crea una lista con los indices.
-        private void ReorderList(List<int> list)
+        private void ReorderList(double[][] list1, double[][] list2)
         {
-            int n = list.Count;
+            int n = list1.Length;
             while (n > 1)
             {
                 n--;
                 int k = rng.Next(n + 1);
-                int value = list[k];
-                list[k] = list[n];
-                list[n] = value;
+                double[] value1 = list1[k];
+                double[] value2 = list2[k];
+
+                list1[k] = list1[n];
+                list1[n] = value1;
+
+                list2[k] = list2[n];
+                list2[n] = value2;
             }
         }
 
@@ -456,6 +502,51 @@ namespace NeuralNetwork
             var guess = FeedFordward(input);
 
             return guess.ToColumnArrays()[0];
+        }
+
+        public string Evaluate(double[][] inputArray, double[][] desiredOutPut)
+        {
+            Matrix<double> outputMatrix = null, desiredMatrix = null;
+
+            //por cada elemneto de la primera dimension del array de entrada
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                //se inicializa la matriz input con los valores de la segunda dimension del array de entrada
+                //aunque es una matriz tiene n cantidad de filas pero 1 sola columna siempre.
+                _inputs = M.Dense(inputArray[i].Length, 1, inputArray[i]);
+
+                var input = M.DenseOfMatrix(_inputs);
+                var desired = M.Dense(desiredOutPut[i].Length, 1, desiredOutPut[i]);
+
+                //por cada capa de la red aplicar la suma ponderada y aplica la funcion de activacion
+                // activacion(W * X + B)
+                var output = FeedFordward(input);
+
+                //cuando sea el primer elemento del batch
+                if (outputMatrix == null)
+                {
+                    //inicializar las matrices con este primer elemento
+                    outputMatrix = M.DenseOfMatrix(output);
+                    desiredMatrix = M.DenseOfMatrix(desired);
+                }
+                else
+                {
+                    //de lo contrario agregar como una columna
+                    //asi pues se formara una matriz donde cada columna corresponda a
+                    //un par de valores X,Y
+                    var tmpMatrix = M.Dense(output.RowCount, outputMatrix.ColumnCount + 1);
+                    outputMatrix.Append(output, tmpMatrix);
+                    outputMatrix = M.DenseOfMatrix(tmpMatrix);
+
+                    desiredMatrix.Append(desired, tmpMatrix);
+                    desiredMatrix = M.DenseOfMatrix(tmpMatrix);
+                }
+
+            }
+
+            //calcular la perdida del batch
+            var batchLoss = _lostFunction(desiredMatrix, outputMatrix);
+            return batchLoss.ToString();
         }
 
         /// <summary>
