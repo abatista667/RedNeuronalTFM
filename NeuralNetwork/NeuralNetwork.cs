@@ -504,7 +504,7 @@ namespace NeuralNetwork
             return guess.ToColumnArrays()[0];
         }
 
-        public string Evaluate(double[][] inputArray, double[][] desiredOutPut)
+        public float Evaluate(double[][] inputArray, double[][] desiredOutPut)
         {
             Matrix<double> outputMatrix = null, desiredMatrix = null;
 
@@ -543,10 +543,33 @@ namespace NeuralNetwork
                 }
 
             }
-
+            int positives = 0;
             //calcular la perdida del batch
             var batchLoss = _lostFunction(desiredMatrix, outputMatrix);
-            return batchLoss.ToString();
+
+            for (int i = 0; i < desiredMatrix.ColumnCount; i++)
+            {
+                var dc = ArgMax(desiredMatrix.Column(i));
+                var oc = ArgMax(outputMatrix.Column(i));
+                if(dc == oc) positives++;
+
+            }
+
+            return (float)positives / desiredMatrix.ColumnCount;
+        }
+
+        private double ArgMax(Vector<double> inp)
+        {
+            if(inp.Count == 1)
+                return inp[0];
+
+            int max = 0;
+            for (int i = 1; i < inp.Count; i++)
+            {
+                if(inp[i] > inp[i-1])
+                    max = i;
+            }
+            return max;
         }
 
         /// <summary>

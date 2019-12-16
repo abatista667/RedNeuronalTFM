@@ -71,6 +71,12 @@
     <Compile Include="ImageClassifier.Designer.cs">
       <DependentUpon>ImageClassifier.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageClassPredictor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImageClassPredictor.Designer.cs">
+      <DependentUpon>ImageClassPredictor.cs</DependentUpon>
+    </Compile>
     <Compile Include="PredCharForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ImageClassifier.resx">
       <DependentUpon>ImageClassifier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImageClassPredictor.resx">
+      <DependentUpon>ImageClassPredictor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PredCharForm.resx">
       <DependentUpon>PredCharForm.cs</DependentUpon>

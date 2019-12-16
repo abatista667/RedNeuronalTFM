@@ -362,6 +362,11 @@ namespace NeuralNetworkGUI
             new ImageClassifier().ShowDialog();
         }
 
+        private void predecirClasesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ImageClassPredictor().ShowDialog();
+        }
+
         private void ToolStripMenuItem5_Click(object sender, EventArgs e)
         {
 

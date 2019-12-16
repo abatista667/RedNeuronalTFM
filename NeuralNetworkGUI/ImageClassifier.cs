@@ -22,13 +22,16 @@ namespace NeuralNetworkGUI
         NeuralNetwork.NeuralNetwork nn;
         BackgroundWorker worker;
         DateTime start;
-
+        List<string> XFiles;
+        List<string> XLabels;
 
         public ImageClassifier()
         {
             InitializeComponent();
             flattenTrainingData = new List<double[]>();
             flattenTestingData = new List<double[]>();
+            XFiles = new List<string>();
+            XLabels = new List<string>();
             YTest = new List<double[]>();
             YTrain = new List<double[]>();
             worker = new BackgroundWorker();
@@ -148,14 +151,14 @@ namespace NeuralNetworkGUI
             {
                 var parts = path.Split('\\');
                 var label = parts[parts.Length - 1].Split('-').Select(x => double.Parse(x));
-                foreach (var fileName in Directory.GetFiles(path))
-                {
-                    var image = Bitmap.FromFile(fileName);
-                    var resized = ResizeBitmap(image, width, height);
-                    double[] arrData = FlatImageRgb(resized);
-                    flattenTrainingData.Add(arrData);
-                    YTrain.Add(label.ToArray());
-                }
+                var fileName = Directory.GetFiles(path)[0];
+
+                var image = Bitmap.FromFile(fileName);
+                var resized = ResizeBitmap(image, width, height);
+                double[] arrData = FlatImageRgb(resized);
+                flattenTrainingData.Add(arrData);
+                YTrain.Add(label.ToArray());
+
             }
         }
         private void loadTestingSet()
@@ -229,8 +232,8 @@ namespace NeuralNetworkGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string res = nn.Evaluate(flattenTestingData.ToArray(), YTest.ToArray());
-            MessageBox.Show("Evaluacion: " + res);
+            float res = nn.Evaluate(flattenTestingData.ToArray(), YTest.ToArray());
+            MessageBox.Show("porcentaje de aciertos: " + res);
         }
 
         private void button7_Click(object sender, EventArgs e)
