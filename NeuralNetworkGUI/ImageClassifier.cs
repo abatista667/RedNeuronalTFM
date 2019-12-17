@@ -151,13 +151,14 @@ namespace NeuralNetworkGUI
             {
                 var parts = path.Split('\\');
                 var label = parts[parts.Length - 1].Split('-').Select(x => double.Parse(x));
-                var fileName = Directory.GetFiles(path)[0];
-
-                var image = Bitmap.FromFile(fileName);
-                var resized = ResizeBitmap(image, width, height);
-                double[] arrData = FlatImageRgb(resized);
-                flattenTrainingData.Add(arrData);
-                YTrain.Add(label.ToArray());
+                foreach (var fileName in Directory.GetFiles(path))
+                {
+                    var image = Bitmap.FromFile(fileName);
+                    var resized = ResizeBitmap(image, width, height);
+                    double[] arrData = FlatImageRgb(resized);
+                    flattenTrainingData.Add(arrData);
+                    YTrain.Add(label.ToArray());
+                }
 
             }
         }
