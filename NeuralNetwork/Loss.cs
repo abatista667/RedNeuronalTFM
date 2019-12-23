@@ -118,27 +118,17 @@ namespace NeuralNetwork
 
         private static Matrix<double> MultiClassCrossEntropy(Matrix<double> y, Matrix<double> yhat)
         {
+
             double notZero = 1e-15;
             Func<double, double> cleanZero = v => v == 0 ? notZero : v;
-
-            Matrix<double> summary = M.Dense(y.RowCount, y.ColumnCount);
-
-            Func<double, double, double> map2 = (si, ti) =>
-            {
-                var class_loss = ti * Math.Log(si == 0? notZero : si);
-                if (double.IsInfinity(class_loss) || double.IsNegativeInfinity(class_loss))
-                {
-                    Console.WriteLine("test");
-                }
-                return class_loss;
-            };
-
-            yhat.Map2(map2, y, summary);
-
-            var vsummary = M.Dense(summary.RowCount, 1, summary.RowSums().ToArray()) * -1;
-            var mean = vsummary.Divide(y.ColumnCount);
-            var d = dLoss(y, yhat);
-            return mean.PointwiseMultiply(d);
+            var yhatLog = yhat.Map(cleanZero).PointwiseLog();
+            var CE = M.Dense(y.RowCount, 1, 
+                        (y.PointwiseMultiply(yhatLog)).RowSums().ToArray()) * -1;
+            
+            var mean = CE.Divide(y.ColumnCount);
+            return mean;
+            //var d = dLoss(y, yhat);
+            //return mean.PointwiseMultiply(d);
         }
 
         /// <summary>

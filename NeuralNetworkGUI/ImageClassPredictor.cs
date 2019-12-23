@@ -52,7 +52,7 @@ namespace NeuralNetworkGUI
             double[] arrData = FlatImageRgb(resized);
             var prediction = nn.Predict(arrData);
             lbPrediction.Text = "";
-            prediction.ToList().ForEach(i => lbPrediction.Text = i.ToString() + " ");
+            prediction.ToList().ForEach(i => lbPrediction.Text += i.ToString() + " ");
             button2.Enabled = false;
         }
 
