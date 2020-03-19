@@ -29,7 +29,7 @@ namespace NeuralNetworkGUI
         private void button1_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
-            
+
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -39,7 +39,7 @@ namespace NeuralNetworkGUI
                 textBox1.Text = openFileDialog2.FileName;
                 nn = new NeuralNetwork.NeuralNetwork();
                 nn.Load(openFileDialog2.FileName);
-                if(image != null) button2.Enabled = true;
+                if (image != null) button2.Enabled = true;
             }
         }
 
@@ -51,8 +51,15 @@ namespace NeuralNetworkGUI
             var resized = ResizeBitmap(image, width, height);
             double[] arrData = FlatImageRgb(resized);
             var prediction = nn.Predict(arrData);
+
             lbPrediction.Text = "";
-            prediction.ToList().ForEach(i => lbPrediction.Text += i.ToString() + " ");
+            string folder = "";
+            if (prediction.Length > 1)
+                prediction.ToList().ForEach(i => folder = i.ToString() + "-");
+            else
+                folder = prediction[0] > 0.5 ? "1" : "0";
+
+            lbPrediction.Text = nn.LabelMapping.Single(x => x.Folder == folder).Label;
             button2.Enabled = false;
         }
 

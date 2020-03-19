@@ -63,3 +63,6 @@ C:\Users\ariel\source\repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\obj\Debu
 C:\Users\ariel\source\repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.DatasetSplitter.resources
 C:\Users\ariel\source\repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.ImageClassifier.resources
 C:\Users\ariel\source\repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\obj\Debug\NeuralNetworkGUI.ImageClassPredictor.resources
+C:\Users\ariel\source\repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\bin\Debug\Newtonsoft.Json.dll
+C:\Users\ariel\source\repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\ariel\source\repos\abatista667\RedNeuronalTFM\NeuralNetworkGUI\bin\Debug\Newtonsoft.Json.xml

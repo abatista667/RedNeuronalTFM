@@ -24,7 +24,7 @@ namespace NeuralNetworkGUI
         DateTime start;
         List<string> XFiles;
         List<string> XLabels;
-
+        string labels;
         public ImageClassifier()
         {
             InitializeComponent();
@@ -102,6 +102,8 @@ namespace NeuralNetworkGUI
             nn = new NeuralNetwork.NeuralNetwork(layers, leraningRate, epoch, loss, false, batches,
                                        optimizer: optimizer, checkPointPath: tbCheckpoint.Text);
 
+            nn.LabelMapping = Newtonsoft.Json.JsonConvert.DeserializeObject<NeuralNetwork.ModelLabel[]>(labels);
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -161,6 +163,9 @@ namespace NeuralNetworkGUI
                 }
 
             }
+            //
+            labels = File.ReadAllText(tbPath.Text + "\\labels.json");
+            
         }
         private void loadTestingSet()
         {

@@ -25,6 +25,8 @@ namespace NeuralNetwork
         public string Labels { get; set; }
 
         public string HidenNodes { get; set; }
+
+        public ModelLabel[] LabelMapping{ get; set; }
     }
 
     public class ReportProgressModel {

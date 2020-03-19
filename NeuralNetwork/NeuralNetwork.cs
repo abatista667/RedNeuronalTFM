@@ -60,6 +60,8 @@ namespace NeuralNetwork
 
         public string CheckPointPath { get; set; }
 
+        public ModelLabel[] LabelMapping { get; set; }
+
         //inicializar los valores de la red neuronal
         public NeuralNetwork(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
         LOSS lost = LOSS.MSE, bool useBias = true, int batchSize = 200, OPTIMIZER optimizer = OPTIMIZER.SGD,
@@ -586,7 +588,8 @@ namespace NeuralNetwork
                 UseBias = _useBias,
                 Features = Features,
                 Labels = Labels,
-                HidenNodes = HiddenNodes
+                HidenNodes = HiddenNodes,
+                //LabelMapping = LabelMapping
             };
 
             // Persist to file
@@ -620,6 +623,7 @@ namespace NeuralNetwork
             Features = model.Features;
             HiddenNodes = model.HidenNodes;
             Labels = model.Labels;
+            LabelMapping = model.LabelMapping;
         }
         /// <summary>
         /// separa el array de X en multiples batches segun la variable _batchSize
