@@ -17,9 +17,8 @@ namespace NeuralNetwork
             output = M.Dense(3,1, new double[]{0.2, 0.3, 0.5});
             desired = M.Dense(3, 1, new double[] { 0, 1, 0 });
 
-            var loss = Loss.GetLostFunction(LOSS.CATEGORICAL_CROSS_ENTROPY)(desired, output);
-            Console.WriteLine(loss);
-            //var dloss = Lost.dSE(desired, output);
+            var regularization = Regularization.CalcL1(0.1, output);
+            Console.WriteLine(regularization);
             Console.Read();
         }
     }

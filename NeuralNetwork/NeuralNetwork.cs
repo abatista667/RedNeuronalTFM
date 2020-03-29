@@ -62,10 +62,15 @@ namespace NeuralNetwork
 
         public ModelLabel[] LabelMapping { get; set; }
 
+        public REGULARIZATION REGULARIZATION { get; set; }
+
+        public double C { get; set; }
+
         //inicializar los valores de la red neuronal
         public NeuralNetwork(List<Layer> layers, double learningRate = 0.001, int epoch = 100,
         LOSS lost = LOSS.MSE, bool useBias = true, int batchSize = 200, OPTIMIZER optimizer = OPTIMIZER.SGD,
-        double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8, bool shufle = true, string checkPointPath = null)
+        double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8, bool shufle = true, string checkPointPath = null,
+        REGULARIZATION regularization = REGULARIZATION.L1, double c = 0.1)
         {
             _layers = layers;
             _batchSize = batchSize;
@@ -86,6 +91,8 @@ namespace NeuralNetwork
             _layerOutput = new List<Matrix<double>>();
             _lostFunction = Loss.GetLostFunction(lost);
             CheckPointPath = checkPointPath;
+            REGULARIZATION = regularization;
+            C= c;
 
             //por cada capa
             for (int i = 0; i < layers.Count; i++)
@@ -135,69 +142,6 @@ namespace NeuralNetwork
         }
 
 
-        /// <summary>
-        /// por cada uno de los ejemplos dados ejecutar el ciclo de entrenamiento de la red,
-        /// multiplicar los pesos W por los valores de entrada  I
-        /// </summary>
-        /// <param name="inputArray">lista de valores Xn</param>
-        /// <param name="desiredOutPut">lista de valores Yn</param>
-        /// <param name="epoch">epoch</param>
-        //private double Train(double[][] inputArray, double[][] desiredOutPut, int epoch)
-        //{
-        //    //se deben convertir los array  en matrices
-        //    Matrix<double> outputMatrix = null, desiredMatrix = null;
-
-        //    //por cada elemneto de la primera dimension del array de entrada
-        //    for (int i = 0; i < inputArray.Length; i++)
-        //    {
-        //        //se inicializa la matriz input con los valores de la segunda dimension del array de entrada
-        //        //aunque es una matriz tiene n cantidad de filas pero 1 sola columna siempre.
-        //        _inputs = M.Dense(inputArray[i].Length, 1, inputArray[i]);
-
-        //        var input = M.DenseOfMatrix(_inputs);
-        //        var desired = M.Dense(desiredOutPut[i].Length, 1, desiredOutPut[i]);
-
-        //        //por cada capa de la red aplicar la suma ponderada y aplica la funcion de activacion
-        //        // activacion(W * X + B)
-        //        var output = FeedFordward(input);
-
-        //        //cuando sea el primer elemento del batch
-        //        if (outputMatrix == null)
-        //        {
-        //            //inicializar las matrices con este primer elemento
-        //            outputMatrix = M.DenseOfMatrix(output);
-        //            desiredMatrix = M.DenseOfMatrix(desired);
-        //        }
-        //        else
-        //        {
-        //            //de lo contrario agregar como una columna
-        //            //asi pues se formara una matriz donde cada columna corresponda a
-        //            //un par de valores X,Y
-        //            var tmpMatrix = M.Dense(output.RowCount, outputMatrix.ColumnCount + 1);
-        //            outputMatrix.Append(output, tmpMatrix);
-        //            outputMatrix = M.DenseOfMatrix(tmpMatrix);
-
-        //            desiredMatrix.Append(desired, tmpMatrix);
-        //            desiredMatrix = M.DenseOfMatrix(tmpMatrix);
-        //        }
-
-        //    }
-
-        //    //calcular la perdida del batch
-        //    var batchLoss = _lostFunction(desiredMatrix, outputMatrix);
-
-        //    _totalLost += batchLoss;
-
-        //    //optimizar la funcion de perdida
-        //    if (_optimizer == OPTIMIZER.SGD)
-        //        StocasticGradientDecent(batchLoss);
-        //    else
-        //        Adam(batchLoss, epoch);
-
-        //    //retorna la perdida total del batch
-        //    return batchLoss.RowSums().ToArray().Sum();
-        //}
-
         private double Train(double[][] inputArray, double[][] desiredOutPut, int epoch)
         {
             //se inicializa la matriz input con los valores de la segunda dimension del array de entrada
@@ -212,6 +156,20 @@ namespace NeuralNetwork
 
             //calcular la perdida del batch
             var batchLoss = _lostFunction(desired, output);
+
+            if (REGULARIZATION == REGULARIZATION.L2)
+            {
+                var reg = Regularization.CalcL2(C, _weigths[_weigths.Count - 1]);
+                batchLoss.Add(reg);
+            }
+
+
+            if (REGULARIZATION == REGULARIZATION.L1)
+            {
+                var reg = Regularization.CalcL1(C, _weigths[_weigths.Count - 1]);
+                batchLoss.Add(reg);
+            }
+
 
             _totalLost += batchLoss;
 
@@ -553,7 +511,7 @@ namespace NeuralNetwork
             {
                 var dc = ArgMax(desiredMatrix.Column(i));
                 var oc = ArgMax(outputMatrix.Column(i));
-                if(dc == oc) positives++;
+                if (dc == oc) positives++;
 
             }
 
@@ -562,13 +520,13 @@ namespace NeuralNetwork
 
         private double ArgMax(Vector<double> inp)
         {
-            if(inp.Count == 1)
+            if (inp.Count == 1)
                 return inp[0];
 
             int max = 0;
             for (int i = 1; i < inp.Count; i++)
             {
-                if(inp[i] > inp[i-1])
+                if (inp[i] > inp[i - 1])
                     max = i;
             }
             return max;
@@ -589,7 +547,7 @@ namespace NeuralNetwork
                 Features = Features,
                 Labels = Labels,
                 HidenNodes = HiddenNodes,
-                //LabelMapping = LabelMapping
+                LabelMapping = LabelMapping
             };
 
             // Persist to file
@@ -623,7 +581,8 @@ namespace NeuralNetwork
             Features = model.Features;
             HiddenNodes = model.HidenNodes;
             Labels = model.Labels;
-            LabelMapping = model.LabelMapping;
+            if (model.LabelMapping != null)
+                LabelMapping = model.LabelMapping;
         }
         /// <summary>
         /// separa el array de X en multiples batches segun la variable _batchSize

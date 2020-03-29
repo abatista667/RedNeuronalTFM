@@ -137,6 +137,19 @@ namespace NeuralNetworkGUI
             nn.Epoch = epoch;
             nn.CheckPointPath = tbCheckpoint.Text;
 
+            var _regularization = REGULARIZATION.NONE;
+
+            if (cbRegularizacion.Text == "L1")
+                _regularization = REGULARIZATION.L1;
+
+            if (cbRegularizacion.Text == "L2")
+                _regularization = REGULARIZATION.L2;
+
+            double _c = double.Parse(tbC.Text);
+
+            nn.C = _c;
+            nn.REGULARIZATION = _regularization;
+
             worker.WorkerReportsProgress = true;
             worker.WorkerSupportsCancellation = true;
             worker.RunWorkerAsync();
@@ -250,6 +263,21 @@ namespace NeuralNetworkGUI
         private void button8_Click(object sender, EventArgs e)
         {
             reportedLoss = new List<double>();
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbRegularizacion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            new ImageClassPredictor().ShowDialog();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace NeuralNetworkGUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindows());
+            Application.Run(new ImageClassifier());
         }
     }
 }

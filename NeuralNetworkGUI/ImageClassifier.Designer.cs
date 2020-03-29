@@ -72,6 +72,11 @@
             this.button7 = new System.Windows.Forms.Button();
             this.lbtiempo = new System.Windows.Forms.Label();
             this.button8 = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.cbRegularizacion = new System.Windows.Forms.ComboBox();
+            this.tbC = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.button9 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -310,8 +315,6 @@
             // ckReiniciar
             // 
             this.ckReiniciar.AutoSize = true;
-            this.ckReiniciar.Checked = true;
-            this.ckReiniciar.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ckReiniciar.Location = new System.Drawing.Point(15, 359);
             this.ckReiniciar.Name = "ckReiniciar";
             this.ckReiniciar.Size = new System.Drawing.Size(85, 17);
@@ -325,7 +328,7 @@
             this.tbBatches.Name = "tbBatches";
             this.tbBatches.Size = new System.Drawing.Size(149, 20);
             this.tbBatches.TabIndex = 34;
-            this.tbBatches.Text = "50";
+            this.tbBatches.Text = "1";
             // 
             // label11
             // 
@@ -414,11 +417,67 @@
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(15, 382);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(77, 13);
+            this.label12.TabIndex = 44;
+            this.label12.Text = "Regularización";
+            this.label12.Click += new System.EventHandler(this.label12_Click);
+            // 
+            // cbRegularizacion
+            // 
+            this.cbRegularizacion.FormattingEnabled = true;
+            this.cbRegularizacion.Items.AddRange(new object[] {
+            "Sin regularizacion",
+            "L1",
+            "L2"});
+            this.cbRegularizacion.Location = new System.Drawing.Point(15, 398);
+            this.cbRegularizacion.Name = "cbRegularizacion";
+            this.cbRegularizacion.Size = new System.Drawing.Size(146, 21);
+            this.cbRegularizacion.TabIndex = 43;
+            this.cbRegularizacion.Text = "Sin regularizacion";
+            this.cbRegularizacion.SelectedIndexChanged += new System.EventHandler(this.cbRegularizacion_SelectedIndexChanged);
+            // 
+            // tbC
+            // 
+            this.tbC.Location = new System.Drawing.Point(15, 448);
+            this.tbC.Name = "tbC";
+            this.tbC.Size = new System.Drawing.Size(149, 20);
+            this.tbC.TabIndex = 46;
+            this.tbC.Text = "0.01";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(15, 432);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(123, 13);
+            this.label13.TabIndex = 45;
+            this.label13.Text = "Contante Regularización";
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(365, 511);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(75, 23);
+            this.button9.TabIndex = 47;
+            this.button9.Text = "Predictor";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // ImageClassifier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 516);
+            this.ClientSize = new System.Drawing.Size(800, 569);
+            this.Controls.Add(this.button9);
+            this.Controls.Add(this.tbC);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.cbRegularizacion);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.lbtiempo);
             this.Controls.Add(this.button7);
@@ -506,5 +565,10 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Label lbtiempo;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ComboBox cbRegularizacion;
+        private System.Windows.Forms.TextBox tbC;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button button9;
     }
 }
