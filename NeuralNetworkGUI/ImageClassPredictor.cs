@@ -54,13 +54,21 @@ namespace NeuralNetworkGUI
 
             lbPrediction.Text = "";
             string folder = "";
-            if (prediction.Length > 1)
-                prediction.ToList().ForEach(i => folder = i.ToString() + "-");
-            else
+            double trust = 0f;
+            if (prediction.Length > 1) 
+                {
+                prediction.ToList().ForEach(i => folder += i.ToString() + "-");
+                folder = folder.Substring(0, folder.Length -1);
+            }
+            else 
+            { 
                 folder = prediction[0] > 0.5 ? "1" : "0";
+                trust = prediction[0] * 100;
+            }
 
             lbPrediction.Text = nn.LabelMapping.Single(x => x.Folder == folder).Label;
             button2.Enabled = false;
+            lbTrust.Text = $"{trust.ToString("0.00")}";
         }
 
         public Bitmap ResizeBitmap(Image bmp, int width, int height)

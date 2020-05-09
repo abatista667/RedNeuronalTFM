@@ -88,21 +88,22 @@ namespace NeuralNetworkGUI
             var activationOutput = ACTIVATION.SIGMOID;
             var loss = LOSS.BINARY_CROSS_ENTROPY;
 
-            if (YTrain.First().Length > 1)
+            if (YTrain.Count > 0 && YTrain.First().Length > 1)
             {
                 activationOutput = ACTIVATION.SOFTMAX;
                 loss = LOSS.CATEGORICAL_CROSS_ENTROPY;
             }
 
-            layers.Add(new Layer(YTrain.First().Length, activationOutput));
-
+            if (YTrain.Count > 0)
+                layers.Add(new Layer(YTrain.First().Length, activationOutput));
 
             var optimizer = Optimizers.ByName[cbOptimizer.Text];
 
             nn = new NeuralNetwork.NeuralNetwork(layers, leraningRate, epoch, loss, false, batches,
                                        optimizer: optimizer, checkPointPath: tbCheckpoint.Text);
 
-            nn.LabelMapping = Newtonsoft.Json.JsonConvert.DeserializeObject<NeuralNetwork.ModelLabel[]>(labels);
+            if (labels != null)
+                nn.LabelMapping = Newtonsoft.Json.JsonConvert.DeserializeObject<NeuralNetwork.ModelLabel[]>(labels);
 
         }
 
@@ -178,7 +179,7 @@ namespace NeuralNetworkGUI
             }
             //
             labels = File.ReadAllText(tbPath.Text + "\\labels.json");
-            
+
         }
         private void loadTestingSet()
         {
@@ -186,6 +187,8 @@ namespace NeuralNetworkGUI
             int height = int.Parse(tbHeigth.Text);
 
             textBox1.Text = folderBrowserDialog2.SelectedPath;
+            flattenTestingData = new List<double[]>();
+            YTest = new List<double[]>();
             foreach (var path in Directory.GetDirectories(textBox1.Text))
             {
                 var parts = path.Split('\\');
@@ -247,12 +250,14 @@ namespace NeuralNetworkGUI
         {
             InitializeNet(false);
             nn.Load(openFileDialog1.FileName);
+            textBox2.Text = openFileDialog1.FileName;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             float res = nn.Evaluate(flattenTestingData.ToArray(), YTest.ToArray());
-            MessageBox.Show("porcentaje de aciertos: " + res);
+            //MessageBox.Show("porcentaje de aciertos: " + res);
+            new EvaluationChart(res).ShowDialog();
         }
 
         private void button7_Click(object sender, EventArgs e)
